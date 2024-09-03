@@ -1,4 +1,4 @@
-package com.pombo.pombo.model;
+package com.pombo.pombo.model.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;

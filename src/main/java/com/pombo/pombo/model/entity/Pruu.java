@@ -1,4 +1,4 @@
-package com.pombo.pombo.model;
+package com.pombo.pombo.model.entity;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
