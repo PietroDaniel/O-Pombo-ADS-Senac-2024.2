@@ -3,6 +3,8 @@ package com.pombo.pombo.model.entity;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import org.hibernate.annotations.UuidGenerator;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -24,11 +26,13 @@ public class Pruu {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false)
-    private String uuid = UUID.randomUUID().toString();
+    @UuidGenerator
+    @Column(name = "uuid", unique = true, nullable = false)
+    private String uuid;
 
     @NotBlank(message = "O texto do pruu é obrigatório")
     @Size(min = 1, max = 300, message = "O texto deve ter entre 1 e 300 caracteres")
+    @Column(name = "texto", nullable = false)
     private String texto;
 
     @Column(name = "data_hora_criacao", nullable = false, updatable = false)
@@ -40,6 +44,7 @@ public class Pruu {
     @Column(name = "bloqueado", nullable = false)
     private boolean bloqueado = false;
 
+    @Column(name = "imagem")
     private String imagem;
 
     @ManyToOne
