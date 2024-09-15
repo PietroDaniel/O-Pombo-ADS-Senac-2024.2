@@ -5,6 +5,8 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import org.hibernate.validator.constraints.br.CPF;
 import lombok.Data;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
@@ -31,4 +33,12 @@ public class Usuario {
 
     @Column(name = "foto")
     private String foto;
+
+    @ManyToMany
+    @JoinTable(
+        name = "likes",
+        joinColumns = @JoinColumn(name = "usuario_id"),
+        inverseJoinColumns = @JoinColumn(name = "pruu_id")
+    )
+    private List<Pruu> likedPruus = new ArrayList<>();
 }
