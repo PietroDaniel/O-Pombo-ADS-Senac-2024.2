@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.pombo.pombo.model.entity.Usuario;
+import com.pombo.pombo.model.seletor.UsuarioSeletor;
 import com.pombo.pombo.service.UsuarioService;
 import com.pombo.pombo.exception.PomboException;
 
@@ -56,5 +57,10 @@ public class UsuarioController {
     public ResponseEntity<Void> unlikePruu(@PathVariable Long usuarioId, @PathVariable Long pruuId) throws PomboException {
         usuarioService.unlikePruu(usuarioId, pruuId);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/filtros")
+    public List<Usuario> listarComFiltros(@RequestBody UsuarioSeletor seletor) {
+        return usuarioService.listarComFiltros(seletor);
     }
 }
