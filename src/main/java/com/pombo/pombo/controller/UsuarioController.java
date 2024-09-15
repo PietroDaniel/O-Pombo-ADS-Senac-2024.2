@@ -45,4 +45,16 @@ public class UsuarioController {
         usuarioService.excluirUsuario(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PostMapping("/{usuarioId}/like/{pruuId}")
+    public ResponseEntity<Void> likePruu(@PathVariable Long usuarioId, @PathVariable Long pruuId) throws PomboException {
+        usuarioService.likePruu(usuarioId, pruuId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/{usuarioId}/unlike/{pruuId}")
+    public ResponseEntity<Void> unlikePruu(@PathVariable Long usuarioId, @PathVariable Long pruuId) throws PomboException {
+        usuarioService.unlikePruu(usuarioId, pruuId);
+        return ResponseEntity.noContent().build();
+    }
 }
