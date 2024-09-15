@@ -1,5 +1,6 @@
 package com.pombo.pombo.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,9 @@ import org.springframework.stereotype.Service;
 import com.pombo.pombo.exception.PomboException;
 import com.pombo.pombo.model.entity.Pruu;
 import com.pombo.pombo.model.repository.PruuRepository;
+import com.pombo.pombo.model.seletor.PruuSeletor;
+
+import jakarta.persistence.criteria.Predicate;
 
 @Service
 public class PruuService {
@@ -21,7 +25,7 @@ public class PruuService {
 
     public Pruu buscarPorId(Long id) throws PomboException {
         return pruuRepository.findById(id)
-            .orElseThrow(() -> new PomboException("Pruu não encontrado"));
+                .orElseThrow(() -> new PomboException("Pruu não encontrado"));
     }
 
     public Pruu criarPruu(Pruu novoPruu) {
@@ -44,5 +48,34 @@ public class PruuService {
         } else {
             throw new PomboException("Pruu já está bloqueado");
         }
+    }
+
+    public List<Pruu> listarComFiltros(PruuSeletor seletor) {
+        return pruuRepository.findAll((root, query, cb) -> {
+            List<Predicate> predicates = new ArrayList<>();
+
+            if (seletor.getTexto() != null && !seletor.getTexto().isEmpty()) {
+                predicates.add(cb.like(root.get("texto"), "%" + seletor.getTexto() + "%"));
+            }
+
+            if (seletor.getDataInicioCriacao() != null) {
+                predicates.add(cb.greaterThanOrEqualTo(root.get("dataHoraCriacao"), seletor.getDataInicioCriacao()));
+            }
+
+            if (seletor.getDataFimCriacao() != null) {
+                predicates.add(cb.lessThanOrEqualTo(root.get("dataHoraCriacao"), seletor.getDataFimCriacao()));
+            }
+
+            if (seletor.getQuantidadeMinimaLikes() != null) {
+                predicates
+                        .add(cb.greaterThanOrEqualTo(root.get("quantidadeLikes"), seletor.getQuantidadeMinimaLikes()));
+            }
+
+            if (seletor.getBloqueado() != null) {
+                predicates.add(cb.equal(root.get("bloqueado"), seletor.getBloqueado()));
+            }
+
+            return cb.and(predicates.toArray(new Predicate[0]));
+        });
     }
 }
