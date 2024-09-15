@@ -38,6 +38,11 @@ public class PruuService {
 
     public void excluirPruu(Long id) throws PomboException {
         Pruu pruu = buscarPorId(id);
-        pruuRepository.delete(pruu);
+        if (!pruu.isBloqueado()) {
+            pruu.setBloqueado(true);
+            pruuRepository.save(pruu);
+        } else {
+            throw new PomboException("Pruu já está bloqueado");
+        }
     }
 }
