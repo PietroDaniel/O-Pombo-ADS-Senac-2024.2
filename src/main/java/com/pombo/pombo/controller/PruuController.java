@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.pombo.pombo.model.entity.Pruu;
+import com.pombo.pombo.model.seletor.PruuSeletor;
 import com.pombo.pombo.service.PruuService;
 import com.pombo.pombo.exception.PomboException;
 
@@ -45,4 +46,10 @@ public class PruuController {
         pruuService.excluirPruu(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PostMapping("/filtros")
+    public List<Pruu> listarComFiltros(@RequestBody PruuSeletor seletor) {
+        return pruuService.listarComFiltros(seletor);
+    }
+
 }
