@@ -12,9 +12,8 @@ import lombok.Data;
 public class Denuncia {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "uuid", unique = true, nullable = false)
-    private UUID uuid;
+    @Column(name = "id", unique = true, nullable = false)
+    private String id; 
 
     @Column(name = "data_hora_criacao", nullable = false)
     private LocalDateTime dataHoraCriacao = LocalDateTime.now();

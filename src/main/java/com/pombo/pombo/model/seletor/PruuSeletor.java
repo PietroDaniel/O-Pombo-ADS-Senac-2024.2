@@ -12,6 +12,8 @@ public class PruuSeletor extends BaseSeletor {
     private LocalDateTime dataFimCriacao;
     private Integer quantidadeMinimaLikes;
     private Boolean bloqueado;
+    private String usuarioUuid;
+
 
     /**
      * Verifica se este seletor tem algum campo preenchido
@@ -22,6 +24,7 @@ public class PruuSeletor extends BaseSeletor {
             || (this.dataInicioCriacao != null)
             || (this.dataFimCriacao != null)
             || (this.quantidadeMinimaLikes != null && this.quantidadeMinimaLikes > 0)
-            || (this.bloqueado != null);
+            || (this.bloqueado != null)
+            || (this.usuarioUuid != null && !this.usuarioUuid.isEmpty());  // Filtro pelo UUID do usuário
     }
 }

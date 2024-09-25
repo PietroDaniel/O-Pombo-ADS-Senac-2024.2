@@ -35,10 +35,9 @@ public class Usuario {
     private String foto;
 
     @ManyToMany
-    @JoinTable(
-        name = "likes",
-        joinColumns = @JoinColumn(name = "usuario_id"),
-        inverseJoinColumns = @JoinColumn(name = "pruu_id")
-    )
+    @JoinTable(name = "likes", joinColumns = @JoinColumn(name = "usuario_id"), inverseJoinColumns = @JoinColumn(name = "pruu_id"))
     private List<Pruu> likedPruus = new ArrayList<>();
+
+    @OneToMany(mappedBy = "usuario")
+    private List<Pruu> pruus = new ArrayList<>(); // Relacionamento para listar os pruus do usuário
 }

@@ -26,27 +26,6 @@ public class DenunciaService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    public Denuncia criarDenuncia(UUID pruuUuid, UUID usuarioUuid, Denuncia.MotivoDenuncia motivo) throws PomboException {
-        Pruu pruu = pruuRepository.findByUuid(pruuUuid)
-            .orElseThrow(() -> new PomboException("Pruu não encontrado"));
-
-        Usuario denunciante = usuarioRepository.findByUuid(usuarioUuid)
-            .orElseThrow(() -> new PomboException("Usuário não encontrado"));
-
-        // Verificar se o usuário já denunciou o pruu
-        if (denunciaRepository.findByPruuUuid(pruuUuid).stream()
-            .anyMatch(d -> d.getDenunciante().getUuid().equals(usuarioUuid))) {
-            throw new PomboException("O usuário já denunciou este pruu.");
-        }
-
-        Denuncia denuncia = new Denuncia();
-        denuncia.setPruu(pruu);
-        denuncia.setDenunciante(denunciante);
-        denuncia.setMotivo(motivo);
-
-        return denunciaRepository.save(denuncia);
-    }
-
     public List<Denuncia> buscarDenunciasPorPruu(UUID pruuUuid) {
         return denunciaRepository.findByPruuUuid(pruuUuid);
     }

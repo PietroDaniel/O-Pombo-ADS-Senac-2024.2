@@ -4,12 +4,19 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+import com.pombo.pombo.exception.PomboException;
 import com.pombo.pombo.model.entity.Pruu;
 import com.pombo.pombo.model.seletor.PruuSeletor;
 import com.pombo.pombo.service.PruuService;
-import com.pombo.pombo.exception.PomboException;
 
 @RestController
 @RequestMapping("/api/pruus")
@@ -23,9 +30,8 @@ public class PruuController {
         return pruuService.listarTodos();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Pruu> buscarPorId(@PathVariable Long id) throws PomboException {
-        Pruu pruu = pruuService.buscarPorId(id);
+    public ResponseEntity<Pruu> buscarPorId(@PathVariable String uuid) throws PomboException {
+        Pruu pruu = pruuService.buscarPorId(uuid);
         return ResponseEntity.ok(pruu);
     }
 
@@ -35,21 +41,28 @@ public class PruuController {
         return ResponseEntity.status(201).body(pruuCriado);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Pruu> atualizarPruu(@PathVariable Long id, @RequestBody Pruu pruuAtualizado) throws PomboException {
-        Pruu pruu = pruuService.atualizarPruu(id, pruuAtualizado);
+    @PutMapping("/{uuid}")
+    public ResponseEntity<Pruu> atualizarPruu(@PathVariable String uuid, @RequestBody Pruu pruuAtualizado)
+            throws PomboException {
+        Pruu pruu = pruuService.atualizarPruu(uuid, pruuAtualizado);
         return ResponseEntity.ok(pruu);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletarPruu(@PathVariable Long id) throws PomboException {
-        pruuService.excluirPruu(id);
+    @DeleteMapping("/{uuid}")
+    public ResponseEntity<Void> deletarPruu(@PathVariable String uuid) throws PomboException {
+        pruuService.excluirPruu(uuid);
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/filtros")
     public List<Pruu> listarComFiltros(@RequestBody PruuSeletor seletor) {
         return pruuService.listarComFiltros(seletor);
+    }
+
+    @PutMapping("/bloquear/{uuid}")
+    public ResponseEntity<Void> bloquearPruu(@PathVariable String uuid) throws PomboException {
+        pruuService.excluirPruu(uuid); // Chamar corretamente o método de bloqueio
+        return ResponseEntity.noContent().build();
     }
 
 }

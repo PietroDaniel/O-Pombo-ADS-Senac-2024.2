@@ -33,7 +33,13 @@ public class UsuarioService {
             .orElseThrow(() -> new PomboException("Usuário não encontrado"));
     }
 
-    public Usuario criarUsuario(Usuario novoUsuario) {
+    public Usuario criarUsuario(Usuario novoUsuario) throws PomboException {
+        if (usuarioRepository.existsByEmail(novoUsuario.getEmail())) {
+            throw new PomboException("Já existe um usuário com este email");
+        }
+        if (usuarioRepository.existsByCpf(novoUsuario.getCpf())) {
+            throw new PomboException("Já existe um usuário com este CPF");
+        }
         return usuarioRepository.save(novoUsuario);
     }
 
@@ -47,14 +53,17 @@ public class UsuarioService {
 
     public void excluirUsuario(Long id) throws PomboException {
         Usuario usuario = buscarPorId(id);
+        if (!usuario.getPruus().isEmpty()) {
+            throw new PomboException("Usuário que possui mensagens não pode ser excluído");
+        }
         usuarioRepository.delete(usuario);
     }
 
-    public void likePruu(Long usuarioId, Long pruuId) throws PomboException {
+    public void likePruu(Long usuarioId, String pruuUuid) throws PomboException {
         Usuario usuario = buscarPorId(usuarioId);
-        Pruu pruu = pruuRepository.findById(pruuId)
+        Pruu pruu = pruuRepository.findById(pruuUuid)
             .orElseThrow(() -> new PomboException("Pruu não encontrado"));
-
+    
         if (!usuario.getLikedPruus().contains(pruu)) {
             usuario.getLikedPruus().add(pruu);
             pruu.setQuantidadeLikes(pruu.getQuantidadeLikes() + 1);
@@ -63,11 +72,11 @@ public class UsuarioService {
         }
     }
 
-    public void unlikePruu(Long usuarioId, Long pruuId) throws PomboException {
+    public void unlikePruu(Long usuarioId, String pruuUuid) throws PomboException {
         Usuario usuario = buscarPorId(usuarioId);
-        Pruu pruu = pruuRepository.findById(pruuId)
+        Pruu pruu = pruuRepository.findById(pruuUuid)
             .orElseThrow(() -> new PomboException("Pruu não encontrado"));
-
+    
         if (usuario.getLikedPruus().contains(pruu)) {
             usuario.getLikedPruus().remove(pruu);
             pruu.setQuantidadeLikes(pruu.getQuantidadeLikes() - 1);

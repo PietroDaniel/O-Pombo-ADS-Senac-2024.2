@@ -23,8 +23,8 @@ public class PruuService {
         return pruuRepository.findAll();
     }
 
-    public Pruu buscarPorId(Long id) throws PomboException {
-        return pruuRepository.findById(id)
+    public Pruu buscarPorId(String uuid) throws PomboException {
+        return pruuRepository.findById(uuid)
                 .orElseThrow(() -> new PomboException("Pruu não encontrado"));
     }
 
@@ -32,16 +32,17 @@ public class PruuService {
         return pruuRepository.save(novoPruu);
     }
 
-    public Pruu atualizarPruu(Long id, Pruu pruuAtualizado) throws PomboException {
-        Pruu pruu = buscarPorId(id);
+    public Pruu atualizarPruu(String uuid, Pruu pruuAtualizado) throws PomboException {
+        Pruu pruu = buscarPorId(uuid);
         pruu.setTexto(pruuAtualizado.getTexto());
         pruu.setImagem(pruuAtualizado.getImagem());
         pruu.setBloqueado(pruuAtualizado.isBloqueado());
         return pruuRepository.save(pruu);
     }
 
-    public void excluirPruu(Long id) throws PomboException {
-        Pruu pruu = buscarPorId(id);
+    public void excluirPruu(String uuid) throws PomboException {
+        Pruu pruu = pruuRepository.findById(uuid)
+                .orElseThrow(() -> new PomboException("Pruu não encontrado"));
         if (!pruu.isBloqueado()) {
             pruu.setBloqueado(true);
             pruuRepository.save(pruu);
@@ -73,6 +74,10 @@ public class PruuService {
 
             if (seletor.getBloqueado() != null) {
                 predicates.add(cb.equal(root.get("bloqueado"), seletor.getBloqueado()));
+            }
+
+            if (seletor.getUsuarioUuid() != null && !seletor.getUsuarioUuid().isEmpty()) {
+                predicates.add(cb.equal(root.get("usuario").get("uuid"), seletor.getUsuarioUuid()));
             }
 
             return cb.and(predicates.toArray(new Predicate[0]));

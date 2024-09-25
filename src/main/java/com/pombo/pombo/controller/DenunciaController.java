@@ -18,14 +18,6 @@ public class DenunciaController {
     @Autowired
     private DenunciaService denunciaService;
 
-    @PostMapping("/pruu/{pruuUuid}/usuario/{usuarioUuid}")
-    public ResponseEntity<Denuncia> criarDenuncia(@PathVariable UUID pruuUuid, 
-                                                  @PathVariable UUID usuarioUuid,
-                                                  @RequestParam Denuncia.MotivoDenuncia motivo) throws PomboException {
-        Denuncia denuncia = denunciaService.criarDenuncia(pruuUuid, usuarioUuid, motivo);
-        return ResponseEntity.status(201).body(denuncia);
-    }
-
     @GetMapping("/pruu/{pruuUuid}")
     public List<Denuncia> buscarDenunciasPorPruu(@PathVariable UUID pruuUuid) {
         return denunciaService.buscarDenunciasPorPruu(pruuUuid);

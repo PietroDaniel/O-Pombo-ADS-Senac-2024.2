@@ -7,5 +7,6 @@ import com.pombo.pombo.model.entity.Usuario;
 
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Long>, JpaSpecificationExecutor<Usuario> {
-    
+    boolean existsByEmail(String email);
+    boolean existsByCpf(String cpf);
 }
