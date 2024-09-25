@@ -17,9 +17,6 @@ import lombok.Data;
 public class Pruu {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     @UuidGenerator
     @Column(name = "uuid", unique = true, nullable = false)
     private String uuid;
