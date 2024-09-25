@@ -10,7 +10,6 @@ import java.util.UUID;
 @Repository
 public interface DenunciaRepository extends JpaRepository<Denuncia, UUID> {
 
-    List<Denuncia> findByPruuUuid(UUID pruuUuid);
-
-    List<Denuncia> findByPruuUuidAndSituacao(UUID pruuUuid, Denuncia.SituacaoDenuncia situacao);
+    List<Denuncia> findByPruu_Uuid(UUID pruuUuid);
+    List<Denuncia> findByPruu_UuidAndSituacao(UUID pruuUuid, Denuncia.SituacaoDenuncia situacao);
 }

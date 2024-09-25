@@ -2,7 +2,6 @@ package com.pombo.pombo.model.entity;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
-
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -12,8 +11,9 @@ import lombok.Data;
 public class Denuncia {
 
     @Id
+    @GeneratedValue
     @Column(name = "id", unique = true, nullable = false)
-    private String id; 
+    private UUID id;  // Corrigir para UUID
 
     @Column(name = "data_hora_criacao", nullable = false)
     private LocalDateTime dataHoraCriacao = LocalDateTime.now();

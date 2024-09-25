@@ -25,8 +25,14 @@ public class DenunciaController {
 
     @PutMapping("/{denunciaUuid}")
     public ResponseEntity<Void> atualizarSituacao(@PathVariable UUID denunciaUuid,
-                                                  @RequestParam Denuncia.SituacaoDenuncia situacao) throws PomboException {
+            @RequestParam Denuncia.SituacaoDenuncia situacao) throws PomboException {
         denunciaService.atualizarSituacao(denunciaUuid, situacao);
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping
+    public ResponseEntity<Denuncia> criarDenuncia(@RequestBody Denuncia novaDenuncia) throws PomboException {
+        Denuncia denunciaCriada = denunciaService.criarDenuncia(novaDenuncia);
+        return ResponseEntity.status(201).body(denunciaCriada);
     }
 }
