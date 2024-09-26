@@ -15,10 +15,6 @@ public interface PruuRepository extends JpaRepository<Pruu, UUID>, JpaSpecificat
 
     Optional<Pruu> findByUuid(UUID pruuUuid);
 
-    List<Pruu> findAll();
-
-    Pruu save(Pruu novoPruu);
-
     List<Pruu> findAll(Object object);
 
     Optional<Pruu> findById(String uuid);

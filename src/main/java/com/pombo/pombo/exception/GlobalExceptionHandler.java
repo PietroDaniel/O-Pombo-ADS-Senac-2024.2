@@ -32,6 +32,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
 
+    @SuppressWarnings("null")
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<String> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
         return new ResponseEntity<>("Erro de integridade de dados: " + ex.getRootCause().getMessage(),

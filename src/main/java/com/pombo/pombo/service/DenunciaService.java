@@ -5,8 +5,6 @@ import org.springframework.stereotype.Service;
 import com.pombo.pombo.exception.PomboException;
 import com.pombo.pombo.model.entity.Denuncia;
 import com.pombo.pombo.model.repository.DenunciaRepository;
-import com.pombo.pombo.model.repository.PruuRepository;
-import com.pombo.pombo.model.repository.UsuarioRepository;
 import java.util.List;
 import java.util.UUID;
 

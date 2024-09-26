@@ -1,8 +1,10 @@
 package com.pombo.pombo.model.seletor;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
+@EqualsAndHashCode(callSuper = false) // Adiciona esta anotação para evitar a chamada à superclasse
 public class UsuarioSeletor extends BaseSeletor {
 
     private String nome;
@@ -14,8 +16,8 @@ public class UsuarioSeletor extends BaseSeletor {
      * @return true caso ao menos um dos atributos tenha sido preenchido
      */
     public boolean temFiltro() {
-        return (this.nome != null && this.nome.trim().length() > 0)
-            || (this.email != null && this.email.trim().length() > 0)
-            || (this.cpf != null && this.cpf.trim().length() > 0);
+        return (this.nome != null && !this.nome.trim().isEmpty())
+            || (this.email != null && !this.email.trim().isEmpty())
+            || (this.cpf != null && !this.cpf.trim().isEmpty());
     }
 }
