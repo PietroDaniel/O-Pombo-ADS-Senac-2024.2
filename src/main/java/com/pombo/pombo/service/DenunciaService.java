@@ -1,12 +1,13 @@
 package com.pombo.pombo.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.pombo.pombo.exception.PomboException;
 import com.pombo.pombo.model.entity.Denuncia;
 import com.pombo.pombo.model.repository.DenunciaRepository;
-import java.util.List;
-import java.util.UUID;
 
 @Service
 public class DenunciaService {
@@ -14,12 +15,12 @@ public class DenunciaService {
     @Autowired
     private DenunciaRepository denunciaRepository;
 
-    public List<Denuncia> buscarDenunciasPorPruu(UUID pruuUuid) {
-        return denunciaRepository.findByPruu_Uuid(pruuUuid);
+    public List<Denuncia> buscarDenunciasPorPruu(String pruuString) {
+        return denunciaRepository.findByPruuUuid(pruuString);
     }
 
-    public void atualizarSituacao(UUID denunciaUuid, Denuncia.SituacaoDenuncia situacao) throws PomboException {
-        Denuncia denuncia = denunciaRepository.findById(denunciaUuid)
+    public void atualizarSituacao(String denunciaString, Denuncia.SituacaoDenuncia situacao) throws PomboException {
+        Denuncia denuncia = denunciaRepository.findById(denunciaString)
                 .orElseThrow(() -> new PomboException("Denúncia não encontrada"));
         denuncia.setSituacao(situacao);
         denunciaRepository.save(denuncia);

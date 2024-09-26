@@ -3,11 +3,16 @@ package com.pombo.pombo.model.entity;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import org.hibernate.annotations.UuidGenerator;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
@@ -17,10 +22,9 @@ import lombok.Data;
 @Table(name = "pruus")
 public class Pruu {
 
-    @Id
-    @UuidGenerator
-    @Column(name = "uuid", unique = true, nullable = false)
-    private UUID uuid;  // Alterado de String para UUID
+    @Id 
+	@UuidGenerator
+	private String uuid; 
 
     @NotBlank(message = "O texto do pruu é obrigatório")
     @Size(min = 1, max = 300, message = "O texto deve ter entre 1 e 300 caracteres")

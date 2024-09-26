@@ -1,16 +1,15 @@
 package com.pombo.pombo.model.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import com.pombo.pombo.model.entity.Denuncia;
-import com.pombo.pombo.model.entity.Pruu;
 
-import java.util.List;
-import java.util.UUID;
+import com.pombo.pombo.model.entity.Denuncia;
 
 @Repository
-public interface DenunciaRepository extends JpaRepository<Denuncia, UUID> {
+public interface DenunciaRepository extends JpaRepository<Denuncia, String> {
 
-    List<Denuncia> findByPruu_Uuid(UUID pruuUuid);
-    List<Denuncia> findByPruuAndSituacao(Pruu pruu, Denuncia.SituacaoDenuncia situacao);
+    List<Denuncia> findByPruuUuid(String pruuId);  
+    //List<Denuncia> findByPruuUuidSituacao(String pruuId, Denuncia.SituacaoDenuncia situacao);
 }
