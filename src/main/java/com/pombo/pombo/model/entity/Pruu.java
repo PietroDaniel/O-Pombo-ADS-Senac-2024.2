@@ -3,6 +3,7 @@ package com.pombo.pombo.model.entity;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.hibernate.annotations.UuidGenerator;
 
@@ -19,7 +20,7 @@ public class Pruu {
     @Id
     @UuidGenerator
     @Column(name = "uuid", unique = true, nullable = false)
-    private String uuid;
+    private UUID uuid;  // Alterado de String para UUID
 
     @NotBlank(message = "O texto do pruu é obrigatório")
     @Size(min = 1, max = 300, message = "O texto deve ter entre 1 e 300 caracteres")
@@ -44,4 +45,5 @@ public class Pruu {
 
     @ManyToMany(mappedBy = "likedPruus")
     private List<Usuario> likedByUsers = new ArrayList<>();
+
 }
