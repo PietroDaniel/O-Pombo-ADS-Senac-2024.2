@@ -13,7 +13,7 @@ public class Denuncia {
     @Id
     @GeneratedValue
     @Column(name = "id", unique = true, nullable = false)
-    private UUID id;  // Corrigir para UUID
+    private UUID id;
 
     @Column(name = "data_hora_criacao", nullable = false)
     private LocalDateTime dataHoraCriacao = LocalDateTime.now();
@@ -21,10 +21,6 @@ public class Denuncia {
     @ManyToOne
     @JoinColumn(name = "denunciante_id", nullable = false)
     private Usuario denunciante;
-
-    @ManyToOne
-    @JoinColumn(name = "pruu_id", nullable = false)
-    private Pruu pruu;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "motivo", nullable = false)
@@ -41,4 +37,9 @@ public class Denuncia {
     public enum SituacaoDenuncia {
         PENDENTE, ANALISADA
     }
+
+    @ManyToOne
+    @JoinColumn(name = "pruu_id", nullable = false)
+    private Pruu pruu;
+
 }
