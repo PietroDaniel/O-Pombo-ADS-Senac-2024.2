@@ -36,7 +36,8 @@ public class UsuarioController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Usuario> atualizarUsuario(@PathVariable Long id, @RequestBody Usuario usuarioAtualizado) throws PomboException {
+    public ResponseEntity<Usuario> atualizarUsuario(@PathVariable Long id, @RequestBody Usuario usuarioAtualizado)
+            throws PomboException {
         Usuario usuario = usuarioService.atualizarUsuario(id, usuarioAtualizado);
         return ResponseEntity.ok(usuario);
     }
@@ -48,16 +49,18 @@ public class UsuarioController {
     }
 
     @PostMapping("/{usuarioId}/like/{pruuUuid}")
-public ResponseEntity<Void> likePruu(@PathVariable Long usuarioId, @PathVariable String pruuUuid) throws PomboException {
-    usuarioService.likePruu(usuarioId, pruuUuid);
-    return ResponseEntity.noContent().build();
-}
+    public ResponseEntity<Void> likePruu(@PathVariable Long usuarioId, @PathVariable String pruuUuid)
+            throws PomboException {
+        usuarioService.likePruu(usuarioId, pruuUuid);
+        return ResponseEntity.noContent().build();
+    }
 
-@PostMapping("/{usuarioId}/unlike/{pruuUuid}")
-public ResponseEntity<Void> unlikePruu(@PathVariable Long usuarioId, @PathVariable String pruuUuid) throws PomboException {
-    usuarioService.unlikePruu(usuarioId, pruuUuid);
-    return ResponseEntity.noContent().build();
-}
+    @PostMapping("/{usuarioId}/unlike/{pruuUuid}")
+    public ResponseEntity<Void> unlikePruu(@PathVariable Long usuarioId, @PathVariable String pruuUuid)
+            throws PomboException {
+        usuarioService.unlikePruu(usuarioId, pruuUuid);
+        return ResponseEntity.noContent().build();
+    }
 
     @PostMapping("/filtros")
     public List<Usuario> listarComFiltros(@RequestBody UsuarioSeletor seletor) {

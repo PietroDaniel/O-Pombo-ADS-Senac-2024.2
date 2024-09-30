@@ -18,14 +18,15 @@ public class PruuSeletor extends BaseSeletor {
 
     /**
      * Verifica se este seletor tem algum campo preenchido
+     * 
      * @return true caso ao menos um dos atributos tenha sido preenchido
      */
     public boolean temFiltro() {
         return (this.texto != null && this.texto.trim().length() > 0)
-            || (this.dataInicioCriacao != null)
-            || (this.dataFimCriacao != null)
-            || (this.quantidadeMinimaLikes != null && this.quantidadeMinimaLikes > 0)
-            || (this.bloqueado != null)
-            || (this.usuarioUuid != null && !this.usuarioUuid.isEmpty());
+                || (this.dataInicioCriacao != null)
+                || (this.dataFimCriacao != null)
+                || (this.quantidadeMinimaLikes != null && this.quantidadeMinimaLikes > 0)
+                || (this.bloqueado != null)
+                || (this.usuarioUuid != null && !this.usuarioUuid.isEmpty());
     }
 }

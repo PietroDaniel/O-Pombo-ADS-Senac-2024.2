@@ -13,11 +13,12 @@ public class UsuarioSeletor extends BaseSeletor {
 
     /**
      * Verifica se este seletor tem algum campo preenchido
+     * 
      * @return true caso ao menos um dos atributos tenha sido preenchido
      */
     public boolean temFiltro() {
         return (this.nome != null && !this.nome.trim().isEmpty())
-            || (this.email != null && !this.email.trim().isEmpty())
-            || (this.cpf != null && !this.cpf.trim().isEmpty());
+                || (this.email != null && !this.email.trim().isEmpty())
+                || (this.cpf != null && !this.cpf.trim().isEmpty());
     }
 }

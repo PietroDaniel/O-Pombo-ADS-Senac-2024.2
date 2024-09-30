@@ -30,7 +30,7 @@ public class UsuarioService {
 
     public Usuario buscarPorId(Long id) throws PomboException {
         return usuarioRepository.findById(id)
-            .orElseThrow(() -> new PomboException("Usuário não encontrado"));
+                .orElseThrow(() -> new PomboException("Usuário não encontrado"));
     }
 
     public Usuario criarUsuario(Usuario novoUsuario) throws PomboException {
@@ -62,8 +62,8 @@ public class UsuarioService {
     public void likePruu(Long usuarioId, String pruuUuid) throws PomboException {
         Usuario usuario = buscarPorId(usuarioId);
         Pruu pruu = pruuRepository.findById(pruuUuid)
-            .orElseThrow(() -> new PomboException("Pruu não encontrado"));
-    
+                .orElseThrow(() -> new PomboException("Pruu não encontrado"));
+
         if (!usuario.getLikedPruus().contains(pruu)) {
             usuario.getLikedPruus().add(pruu);
             pruu.setQuantidadeLikes(pruu.getQuantidadeLikes() + 1);
@@ -75,8 +75,8 @@ public class UsuarioService {
     public void unlikePruu(Long usuarioId, String pruuUuid) throws PomboException {
         Usuario usuario = buscarPorId(usuarioId);
         Pruu pruu = pruuRepository.findById(pruuUuid)
-            .orElseThrow(() -> new PomboException("Pruu não encontrado"));
-    
+                .orElseThrow(() -> new PomboException("Pruu não encontrado"));
+
         if (usuario.getLikedPruus().contains(pruu)) {
             usuario.getLikedPruus().remove(pruu);
             pruu.setQuantidadeLikes(pruu.getQuantidadeLikes() - 1);

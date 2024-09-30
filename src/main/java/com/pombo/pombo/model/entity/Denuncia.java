@@ -19,9 +19,9 @@ import lombok.Data;
 @Table(name = "denuncias")
 public class Denuncia {
 
-   @Id 
-	@UuidGenerator
-	private String uuid;  
+    @Id
+    @UuidGenerator
+    private String uuid;
 
     @Column(name = "data_hora_criacao", nullable = false)
     private LocalDateTime dataHoraCriacao = LocalDateTime.now();
