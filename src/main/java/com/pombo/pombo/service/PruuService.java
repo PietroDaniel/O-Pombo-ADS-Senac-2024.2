@@ -41,8 +41,7 @@ public class PruuService {
     }
 
     public void excluirPruu(String uuid) throws PomboException {
-        Pruu pruu = pruuRepository.findById(uuid)
-                .orElseThrow(() -> new PomboException("Pruu não encontrado"));
+        Pruu pruu = buscarPorId(uuid);
         if (!pruu.isBloqueado()) {
             pruu.setBloqueado(true);
             pruuRepository.save(pruu);
