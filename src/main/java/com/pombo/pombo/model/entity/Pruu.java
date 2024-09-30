@@ -10,6 +10,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany; // Adicione essa importação
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -50,4 +51,6 @@ public class Pruu {
     @ManyToMany(mappedBy = "likedPruus")
     private List<Usuario> likedByUsers = new ArrayList<>();
 
+    @OneToMany(mappedBy = "pruu")
+    private List<Denuncia> denuncias = new ArrayList<>(); 
 }

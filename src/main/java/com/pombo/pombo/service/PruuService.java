@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.pombo.pombo.exception.PomboException;
+import com.pombo.pombo.model.dto.PruuDTO;
 import com.pombo.pombo.model.entity.Pruu;
 import com.pombo.pombo.model.repository.PruuRepository;
 import com.pombo.pombo.model.seletor.PruuSeletor;
@@ -82,4 +83,21 @@ public class PruuService {
             return cb.and(predicates.toArray(new Predicate[0]));
         });
     }
+
+    public PruuDTO gerarRelatorioPruu(String uuid) throws PomboException {
+        Pruu pruu = pruuRepository.findById(uuid)
+                .orElseThrow(() -> new PomboException("Pruu não encontrado"));
+
+        PruuDTO dto = new PruuDTO();
+        String texto = pruu.isBloqueado() ? "Bloqueado pelo administrador" : pruu.getTexto();
+        dto.setTexto(texto);
+        dto.setQuantidadeLikes(pruu.getQuantidadeLikes());
+        dto.setNomeUsuario(pruu.getUsuario().getNome());
+        dto.setUuidUsuario(pruu.getUsuario().getId().toString());
+        dto.setQuantidadeDenuncias(pruu.getDenuncias().size());
+
+        return dto;
+    }
+
+    
 }

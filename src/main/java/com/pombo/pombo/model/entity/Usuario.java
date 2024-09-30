@@ -39,5 +39,5 @@ public class Usuario {
     private List<Pruu> likedPruus = new ArrayList<>();
 
     @OneToMany(mappedBy = "usuario")
-    private List<Pruu> pruus = new ArrayList<>(); // Relacionamento para listar os pruus do usuário
+    private List<Pruu> pruus = new ArrayList<>(); 
 }

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pombo.pombo.exception.PomboException;
+import com.pombo.pombo.model.dto.PruuDTO;
 import com.pombo.pombo.model.entity.Pruu;
 import com.pombo.pombo.model.seletor.PruuSeletor;
 import com.pombo.pombo.service.PruuService;
@@ -61,8 +62,14 @@ public class PruuController {
 
     @PutMapping("/bloquear/{uuid}")
     public ResponseEntity<Void> bloquearPruu(@PathVariable String uuid) throws PomboException {
-        pruuService.excluirPruu(uuid); // Chamar corretamente o método de bloqueio
+        pruuService.excluirPruu(uuid); 
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/relatorio/{uuid}")
+    public ResponseEntity<PruuDTO> gerarRelatorioPruu(@PathVariable String uuid) throws PomboException {
+        PruuDTO pruuDTO = pruuService.gerarRelatorioPruu(uuid);
+        return ResponseEntity.ok(pruuDTO);
     }
 
 }

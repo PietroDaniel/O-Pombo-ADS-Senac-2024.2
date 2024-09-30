@@ -29,6 +29,11 @@ public class DenunciaService {
     }
 
     public Denuncia criarDenuncia(Denuncia novaDenuncia) throws PomboException {
+
+        if (novaDenuncia.getPruu().isBloqueado()) {
+            throw new PomboException("Não é possível denunciar um pruu bloqueado.");
+        }
+
         boolean jaDenunciado = denunciaRepository.existsByDenuncianteAndPruu(novaDenuncia.getDenunciante(),
                 novaDenuncia.getPruu());
         if (jaDenunciado) {
