@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@ActiveProfiles("test")
+@ActiveProfiles("test")  // Certifique-se de que o perfil 'test' usa H2 ou outro banco em memória
 public class PruuRepositoryTest {
 
     @Autowired
@@ -28,7 +28,6 @@ public class PruuRepositoryTest {
 
     @BeforeEach
     public void setUp() {
-        // Inicializando um usuário para ser utilizado nos testes de inserção de Pruu
         usuario = new Usuario();
         usuario.setNome("João");
         usuario.setEmail("joao@example.com");
@@ -38,14 +37,12 @@ public class PruuRepositoryTest {
 
     @Test
     public void testSalvarDadosCorretos() {
-        // Teste de inserção de um Pruu com todos os dados corretos
         Pruu pruu = new Pruu();
         pruu.setTexto("Texto válido");
         pruu.setUsuario(usuario);
 
         Pruu pruuSalvo = pruuRepository.save(pruu);
         
-        // Verificações
         assertNotNull(pruuSalvo);
         assertEquals("Texto válido", pruuSalvo.getTexto());
         assertEquals(usuario.getId(), pruuSalvo.getUsuario().getId());
@@ -53,9 +50,8 @@ public class PruuRepositoryTest {
 
     @Test
     public void testSalvarTextoInvalidoNulo() {
-        // Teste para verificar inserção de um Pruu com texto nulo
         Pruu pruu = new Pruu();
-        pruu.setTexto(null); // Texto nulo
+        pruu.setTexto(null);
         pruu.setUsuario(usuario);
 
         assertThatThrownBy(() -> pruuRepository.save(pruu))
@@ -65,9 +61,8 @@ public class PruuRepositoryTest {
 
     @Test
     public void testSalvarTextoInvalidoMaiorQue300Caracteres() {
-        // Teste para verificar inserção de um Pruu com texto maior que 300 caracteres
         Pruu pruu = new Pruu();
-        pruu.setTexto("A".repeat(301)); // Texto com 301 caracteres
+        pruu.setTexto("A".repeat(301));
         pruu.setUsuario(usuario);
 
         assertThatThrownBy(() -> pruuRepository.save(pruu))
@@ -77,13 +72,11 @@ public class PruuRepositoryTest {
 
     @Test
     public void testAtualizarDadosCorretos() {
-        // Teste para verificar a atualização de um Pruu existente com dados corretos
         Pruu pruu = new Pruu();
         pruu.setTexto("Texto original");
         pruu.setUsuario(usuario);
         Pruu pruuSalvo = pruuRepository.save(pruu);
 
-        // Atualizando o texto do Pruu
         pruuSalvo.setTexto("Texto atualizado");
         Pruu pruuAtualizado = pruuRepository.save(pruuSalvo);
 
@@ -93,13 +86,12 @@ public class PruuRepositoryTest {
 
     @Test
     public void testAtualizarTextoInvalidoMaiorQue300Caracteres() {
-        // Teste para verificar a atualização de um Pruu com texto inválido (> 300 caracteres)
         Pruu pruu = new Pruu();
         pruu.setTexto("Texto original");
         pruu.setUsuario(usuario);
         Pruu pruuSalvo = pruuRepository.save(pruu);
 
-        pruuSalvo.setTexto("A".repeat(301)); // Atualizando com texto inválido
+        pruuSalvo.setTexto("A".repeat(301));
 
         assertThatThrownBy(() -> pruuRepository.save(pruuSalvo))
             .isInstanceOf(ConstraintViolationException.class)
@@ -108,7 +100,6 @@ public class PruuRepositoryTest {
 
     @Test
     public void testExcluirIdCorretoExistente() {
-        // Teste para verificar a exclusão de um Pruu existente
         Pruu pruu = new Pruu();
         pruu.setTexto("Texto para exclusão");
         pruu.setUsuario(usuario);
@@ -116,14 +107,14 @@ public class PruuRepositoryTest {
 
         pruuRepository.deleteById(pruuSalvo.getUuid());
 
-        assertThatThrownBy(() -> pruuRepository.findById(pruuSalvo.getUuid()).orElseThrow(() -> new RuntimeException("Pruu não encontrado")))
+        assertThatThrownBy(() -> pruuRepository.findById(pruuSalvo.getUuid())
+            .orElseThrow(() -> new RuntimeException("Pruu não encontrado")))
             .isInstanceOf(RuntimeException.class)
             .hasMessageContaining("Pruu não encontrado");
     }
 
     @Test
     public void testExcluirIdIncorretoInexistente() {
-        // Teste para verificar a exclusão de um Pruu inexistente
         String uuidInexistente = "uuid-nao-existente";
         assertThatThrownBy(() -> pruuRepository.deleteById(uuidInexistente))
             .isInstanceOf(RuntimeException.class)
@@ -132,7 +123,6 @@ public class PruuRepositoryTest {
 
     @Test
     public void testPesquisarTodos() {
-        // Teste para verificar a listagem de todos os Pruus
         Pruu pruu1 = new Pruu();
         pruu1.setTexto("Pruu 1");
         pruu1.setUsuario(usuario);

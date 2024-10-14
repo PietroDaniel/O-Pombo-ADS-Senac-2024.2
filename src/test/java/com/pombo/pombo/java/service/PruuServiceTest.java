@@ -6,17 +6,14 @@ import com.pombo.pombo.model.entity.Usuario;
 import com.pombo.pombo.model.repository.PruuRepository;
 import com.pombo.pombo.model.repository.UsuarioRepository;
 import com.pombo.pombo.service.PruuService;
-
 import jakarta.validation.ConstraintViolationException;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
@@ -25,8 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
-@ActiveProfiles("test")
+@ExtendWith(MockitoExtension.class)
 public class PruuServiceTest {
 
     @Mock
@@ -43,9 +39,6 @@ public class PruuServiceTest {
 
     @BeforeEach
     public void setUp() {
-        MockitoAnnotations.openMocks(this);
-
-        // Inicializando objetos mock para os testes
         usuario = new Usuario();
         usuario.setId(1L);
         usuario.setNome("João");
@@ -60,12 +53,10 @@ public class PruuServiceTest {
     @Test
     @DisplayName("Deve salvar um Pruu com sucesso")
     public void testSalvarPruuComSucesso() {
-        // Simulando o comportamento do repositório
         when(pruuRepository.save(any(Pruu.class))).thenReturn(pruu);
 
         Pruu pruuSalvo = pruuService.criarPruu(pruu);
 
-        // Verificações
         assertNotNull(pruuSalvo);
         assertEquals("Texto de teste", pruuSalvo.getTexto());
         verify(pruuRepository, times(1)).save(any(Pruu.class));
@@ -86,7 +77,6 @@ public class PruuServiceTest {
     @Test
     @DisplayName("Deve buscar um Pruu por ID com sucesso")
     public void testBuscarPruuPorIdComSucesso() throws PomboException {
-        // Simulando a busca de um Pruu existente
         when(pruuRepository.findById(anyString())).thenReturn(Optional.of(pruu));
 
         Pruu pruuEncontrado = pruuService.buscarPorId("uuid-pruu");
@@ -99,7 +89,6 @@ public class PruuServiceTest {
     @Test
     @DisplayName("Deve lançar exceção ao buscar um Pruu com UUID inválido")
     public void testBuscarPruuPorIdInvalido() {
-        // Simulando a ausência de um Pruu para o UUID fornecido
         when(pruuRepository.findById(anyString())).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> pruuService.buscarPorId("uuid-invalido"))
