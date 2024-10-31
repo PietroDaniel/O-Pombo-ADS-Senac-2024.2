@@ -2,6 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    
     <modelVersion>4.0.0</modelVersion>
 
     <!-- Spring Boot Starter Parent -->
@@ -17,6 +18,9 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>pombo</name>
     <description>Projeto de microblog "O Pombo" para a disciplina de Desenvolvimento Fullstack</description>
+
+    <!-- Definição do empacotamento como WAR para deploy opcional em servidores de aplicação -->
+    <packaging>war</packaging>
 
     <!-- Propriedade para definir a versão do Java -->
     <properties>
@@ -125,6 +129,12 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- Tomcat para suporte a deploy em servidores de aplicação (ex. Render) -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <build>
