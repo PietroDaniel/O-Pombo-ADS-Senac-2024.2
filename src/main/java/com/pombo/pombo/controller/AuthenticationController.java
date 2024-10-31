@@ -1,16 +1,18 @@
 package com.pombo.pombo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pombo.pombo.auth.AuthenticationService;
+import com.pombo.pombo.exception.PomboException;
+import com.pombo.pombo.model.entity.Usuario;
+import com.pombo.pombo.service.UsuarioService;
 
 @RestController
 @RequestMapping(path = "/auth")
@@ -22,10 +24,8 @@ public class AuthenticationController {
   @Autowired
   private PasswordEncoder passwordEncoder;
 
-  /*
-   * @Autowired
-   * private JogadorService jogadorService;
-   */
+  @Autowired
+  private UsuarioService usuarioService;
 
   /**
    * Método de login padronizado -> Basic Auth
@@ -44,18 +44,10 @@ public class AuthenticationController {
    * }
    */
 
-  /*
-   * @PostMapping("/novo-jogador")
-   * 
-   * @ResponseStatus(code = HttpStatus.CREATED)
-   * public void registrarJogador(@RequestBody Jogador novoJogador) {
-   * 
-   * String senhaCifrada = passwordEncoder.encode(novoJogador.getSenha());
-   * 
-   * novoJogador.setSenha(senhaCifrada);
-   * novoJogador.setPerfil(PerfilAcesso.JOGADOR);
-   * 
-   * jogadorService.inserir(novoJogador);
-   * }
-   */
+  @PostMapping("/register")
+  public ResponseEntity<Usuario> criarUsuario(@RequestBody Usuario novoUsuario) throws PomboException {
+    Usuario usuarioCriado = usuarioService.criarUsuario(novoUsuario);
+    return ResponseEntity.status(201).body(usuarioCriado);
+  }
+
 }
