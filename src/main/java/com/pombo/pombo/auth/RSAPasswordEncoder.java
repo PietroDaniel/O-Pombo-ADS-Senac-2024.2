@@ -1,10 +1,12 @@
-package br.sc.senac.vemnox1.auth;
+package com.pombo.pombo.auth;
 import java.nio.charset.StandardCharsets;
 import java.security.PrivateKey;
 import java.security.PublicKey;
-import javax.crypto.Cipher;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.Base64;
+
+import javax.crypto.Cipher;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class RSAPasswordEncoder implements PasswordEncoder {
 
