@@ -2,6 +2,7 @@ package com.pombo.pombo.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,22 +25,8 @@ public class UsuarioService {
     @Autowired
     private PruuRepository pruuRepository;
 
-    public List<Usuario> listarTodos() {
-        return usuarioRepository.findAll();
-    }
-
-    public Usuario buscarPorId(Long id) throws PomboException {
-        return usuarioRepository.findById(id)
-                .orElseThrow(() -> new PomboException("Usuário não encontrado"));
-    }
-
     public Usuario criarUsuario(Usuario novoUsuario) throws PomboException {
-        if (usuarioRepository.existsByEmail(novoUsuario.getEmail())) {
-            throw new PomboException("Já existe um usuário com este email");
-        }
-        if (usuarioRepository.existsByCpf(novoUsuario.getCpf())) {
-            throw new PomboException("Já existe um usuário com este CPF");
-        }
+
         return usuarioRepository.save(novoUsuario);
     }
 
@@ -51,39 +38,42 @@ public class UsuarioService {
         return usuarioRepository.save(usuario);
     }
 
-    public void excluirUsuario(Long id) throws PomboException {
-        Usuario usuario = buscarPorId(id);
-        if (!usuario.getPruus().isEmpty()) {
-            throw new PomboException("Usuário que possui mensagens não pode ser excluído");
-        }
-        usuarioRepository.delete(usuario);
+    public List<Usuario> listarTodos() {
+        return usuarioRepository.findAll();
     }
 
-    public void likePruu(Long usuarioId, String pruuUuid) throws PomboException {
-        Usuario usuario = buscarPorId(usuarioId);
-        Pruu pruu = pruuRepository.findById(pruuUuid)
-                .orElseThrow(() -> new PomboException("Pruu não encontrado"));
-
-        if (!usuario.getLikedPruus().contains(pruu)) {
-            usuario.getLikedPruus().add(pruu);
-            pruu.setQuantidadeLikes(pruu.getQuantidadeLikes() + 1);
-            usuarioRepository.save(usuario);
-            pruuRepository.save(pruu);
-        }
+    public Usuario buscarPorId(Long id) throws PomboException {
+        return usuarioRepository.findById(id)
+                .orElseThrow(() -> new PomboException("Usuário não encontrado"));
     }
 
-    public void unlikePruu(Long usuarioId, String pruuUuid) throws PomboException {
-        Usuario usuario = buscarPorId(usuarioId);
-        Pruu pruu = pruuRepository.findById(pruuUuid)
-                .orElseThrow(() -> new PomboException("Pruu não encontrado"));
 
-        if (usuario.getLikedPruus().contains(pruu)) {
-            usuario.getLikedPruus().remove(pruu);
-            pruu.setQuantidadeLikes(pruu.getQuantidadeLikes() - 1);
-            usuarioRepository.save(usuario);
-            pruuRepository.save(pruu);
-        }
-    }
+
+    // public void likePruu(Long usuarioId, String pruuUuid) throws PomboException {
+    //     Usuario usuario = buscarPorId(usuarioId);
+    //     Pruu pruu = pruuRepository.findById(pruuUuid)
+    //             .orElseThrow(() -> new PomboException("Pruu não encontrado"));
+
+    //     if (!usuario.getLikedPruus().contains(pruu)) {
+    //         usuario.getLikedPruus().add(pruu);
+    //         pruu.setQuantidadeLikes(pruu.getQuantidadeLikes() + 1);
+    //         usuarioRepository.save(usuario);
+    //         pruuRepository.save(pruu);
+    //     }
+    // }
+
+    // public void unlikePruu(Long usuarioId, String pruuUuid) throws PomboException {
+    //     Usuario usuario = buscarPorId(usuarioId);
+    //     Pruu pruu = pruuRepository.findById(pruuUuid)
+    //             .orElseThrow(() -> new PomboException("Pruu não encontrado"));
+
+    //     if (usuario.getLikedPruus().contains(pruu)) {
+    //         usuario.getLikedPruus().remove(pruu);
+    //         pruu.setQuantidadeLikes(pruu.getQuantidadeLikes() - 1);
+    //         usuarioRepository.save(usuario);
+    //         pruuRepository.save(pruu);
+    //     }
+    // }
 
     public List<Usuario> listarComFiltros(UsuarioSeletor seletor) {
         return usuarioRepository.findAll((root, query, cb) -> {
@@ -105,4 +95,32 @@ public class UsuarioService {
         });
     }
 
+    public void excluirUsuario(Long id) throws PomboException {
+        Usuario usuario = buscarPorId(id);
+        if (!usuario.getPruus().isEmpty()) {
+            throw new PomboException("Usuário que possui mensagens não pode ser excluído");
+        }
+        usuarioRepository.delete(usuario);
+    }
+
+    public void verificarSeUsuarioExiste(Usuario usuario) throws PomboException{
+        Optional<Usuario> usuarioComMesmoEmail = usuarioRepository.findByEmail(usuario.getEmail());
+        Optional<Usuario> usuarioComMesmoCpf = usuarioRepository.findByCpf(usuario.getCpf());
+
+        if(usuario.getId() == null) {
+            usuario.setId(0L);
+        }
+
+        if(usuarioComMesmoEmail.isPresent()) {
+            if(!usuario.getId().equals(usuarioComMesmoEmail.get().getId())) {
+                throw new PomboException("Email ja cadastrado!");
+            }
+        }
+
+        if(usuarioComMesmoCpf.isPresent()) {
+            if(!usuario.getId().equals(usuarioComMesmoCpf.get().getId())) {
+                throw new PomboException("Cpf ja cadastrado!");
+            }
+        }
+    }
 }

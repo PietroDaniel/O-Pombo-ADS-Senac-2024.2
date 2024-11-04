@@ -91,7 +91,6 @@ public class PruuService {
         PruuDTO dto = new PruuDTO();
         String texto = pruu.isBloqueado() ? "Bloqueado pelo administrador" : pruu.getTexto();
         dto.setTexto(texto);
-        dto.setQuantidadeLikes(pruu.getQuantidadeLikes());
         dto.setNomeUsuario(pruu.getUsuario().getNome());
         dto.setUuidUsuario(pruu.getUsuario().getId().toString());
         dto.setQuantidadeDenuncias(pruu.getDenuncias().size());

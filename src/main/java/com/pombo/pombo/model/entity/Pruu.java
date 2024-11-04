@@ -10,6 +10,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.OneToMany; // Adicione essa importação
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
@@ -35,9 +36,6 @@ public class Pruu {
     @Column(name = "data_hora_criacao", nullable = false, updatable = false)
     private LocalDateTime dataHoraCriacao = LocalDateTime.now();
 
-    @Column(name = "quantidade_likes", nullable = false)
-    private int quantidadeLikes = 0;
-
     @Column(name = "bloqueado", nullable = false)
     private boolean bloqueado = false;
 
@@ -48,7 +46,8 @@ public class Pruu {
     @JoinColumn(name = "usuario_id", nullable = false)
     private Usuario usuario;
 
-    @ManyToMany(mappedBy = "likedPruus")
+    @ManyToMany
+    @JoinTable(name = "pruu_likes", joinColumns = @JoinColumn(name = "pruu_id"), inverseJoinColumns = @JoinColumn(name = "usuario_id"))
     private List<Usuario> likedByUsers = new ArrayList<>();
 
     @OneToMany(mappedBy = "pruu")
