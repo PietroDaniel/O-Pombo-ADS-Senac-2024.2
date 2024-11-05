@@ -51,7 +51,7 @@ public class Usuario implements UserDetails{
     @Column(unique = true)
     private String cpf;
 
-    @Column(columnDefinition = "LONGTEXT")
+    @Column(columnDefinition = "TEXT")
 	private String foto;
 
     @NotBlank(message = "A senha é obrigatória")
