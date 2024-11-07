@@ -51,7 +51,7 @@ public class UsuarioService {
     }
 
     public List<Usuario> listarComFiltros(UsuarioSeletor seletor) {
-        
+
         if(seletor.temPaginacao()) {
             int pageNumber = seletor.getPagina();
             int pageSize = seletor.getLimite();

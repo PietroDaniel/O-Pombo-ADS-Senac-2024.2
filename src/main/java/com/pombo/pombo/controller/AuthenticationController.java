@@ -37,16 +37,19 @@ public class AuthenticationController {
    * @return o JWT gerado
    */
 
-  /*
-   * @PostMapping("authenticate")
-   * public String authenticate(Authentication authentication) {
-   * return authenticationService.authenticate(authentication);
-   * }
-   */
+  @PostMapping("/authenticate")
+  public String authenticate(Authentication authentication) {
+    return authenticationService.authenticate(authentication);
+  }
 
   @PostMapping("/register")
   public ResponseEntity<Usuario> criarUsuario(@RequestBody Usuario novoUsuario) throws PomboException {
+
+    String senhaCifrada = passwordEncoder.encode(novoUsuario.getPassword());
+    novoUsuario.setPassword(senhaCifrada);
+
     Usuario usuarioCriado = usuarioService.criarUsuario(novoUsuario);
+
     return ResponseEntity.status(201).body(usuarioCriado);
   }
 
