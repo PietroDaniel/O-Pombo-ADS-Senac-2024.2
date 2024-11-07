@@ -36,22 +36,15 @@ public class SecurityConfig {
 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		//Stateless -> não guarda o estado da aplicação (padrão usado no REST)
-		//Stateful -> guarda o estado da aplicação
-		//https://medium.com/exactaworks/stateless-vs-stateful-f596a6b6471d
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(
-                		//Hierarquia de permissões e bloqueios
                         auth -> auth
-                        		//URLs liberadas
-                        		.requestMatchers("/auth/authenticate", "/auth/register").permitAll()
-                        		
-                        		//Todas as demais são bloqueadas
+                                .requestMatchers("/auth/authenticate", "/auth/register").permitAll()
                                 .anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults())
                 .oauth2ResourceServer(
                         conf -> conf.jwt(Customizer.withDefaults()));
-        
+
         return http.build();
     }
 
@@ -61,14 +54,14 @@ public class SecurityConfig {
     }
 
     @Bean
-    JwtEncoder jwtEncoder(){
+    JwtEncoder jwtEncoder() {
         JWK jwk = new RSAKey.Builder(publicKey).privateKey(privateKey).build();
         JWKSource<SecurityContext> jwks = new ImmutableJWKSet<>(new JWKSet(jwk));
-        return  new NimbusJwtEncoder(jwks);
+        return new NimbusJwtEncoder(jwks);
     }
 
     @Bean
-    PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
+    PasswordEncoder passwordEncoder() {
+        return new RSAPasswordEncoder(publicKey, privateKey);
     }
 }

@@ -37,7 +37,7 @@ public class AuthenticationController {
    * @return o JWT gerado
    */
 
-  @PostMapping("/authenticate")
+  @PostMapping("authenticate")
   public String authenticate(Authentication authentication) {
     return authenticationService.authenticate(authentication);
   }
