@@ -25,6 +25,8 @@
     <!-- Propriedade para definir a versão do Java -->
     <properties>
         <java.version>17</java.version>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
     </properties>
 
     <dependencies>
