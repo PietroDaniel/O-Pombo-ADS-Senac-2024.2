@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.pombo.pombo.model.dto.PruuDTO;
 import jakarta.persistence.*;
 import org.hibernate.annotations.UuidGenerator;
 
@@ -19,7 +20,7 @@ public class Pruu {
     @Id 
 	@UuidGenerator
     @GeneratedValue(strategy = GenerationType.UUID)
-	private String uuid;
+	private String id;
 
     @ManyToOne
     @JoinColumn(name = "usuario_id", nullable = false)
@@ -45,6 +46,17 @@ public class Pruu {
     @Column(name = "data_hora_criacao", nullable = false, updatable = false)
     private LocalDateTime dataHoraCriacao = LocalDateTime.now();
 
-
-
+    public static PruuDTO paraDTO(Pruu pruu, Integer quantidadeLikes, Integer quantidadeDenuncias) {
+        return new PruuDTO(
+                pruu.getId(),
+                pruu.getTexto(),
+                pruu.getImagem(),
+                pruu.getUsuario().getId(),
+                pruu.getUsuario().getNome(),
+                pruu.getUsuario().getFoto(),
+                quantidadeLikes,
+                quantidadeDenuncias,
+                pruu.getDataHoraCriacao()
+        );
+    }
 }

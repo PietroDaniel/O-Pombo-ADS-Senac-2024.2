@@ -1,12 +1,20 @@
 package com.pombo.pombo.model.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 @Data
+@AllArgsConstructor
 public class PruuDTO {
-    private String texto;
-    private int quantidadeLikes;
-    private String nomeUsuario;
-    private String uuidUsuario;
-    private int quantidadeDenuncias;
+    private String pruuId;
+    private String pruuConteudo;
+    private String pruuImagem;
+    private Long usuarioId;
+    private String usuarioNome;
+    private String usuarioFotoPerfil;
+    private Integer quantidadeLikes;
+    private Integer quantidadeDenuncias;
+    private LocalDateTime criadoEm;
 }
