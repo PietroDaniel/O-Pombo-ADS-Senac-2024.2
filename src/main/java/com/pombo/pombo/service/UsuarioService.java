@@ -6,6 +6,9 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.pombo.pombo.exception.PomboException;
@@ -18,7 +21,7 @@ import com.pombo.pombo.model.seletor.UsuarioSeletor;
 import jakarta.persistence.criteria.Predicate;
 
 @Service
-public class UsuarioService {
+public class UsuarioService implements UserDetailsService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
@@ -52,7 +55,7 @@ public class UsuarioService {
 
     public List<Usuario> listarComFiltros(UsuarioSeletor seletor) {
 
-        if(seletor.temPaginacao()) {
+        if (seletor.temPaginacao()) {
             int pageNumber = seletor.getPagina();
             int pageSize = seletor.getLimite();
 
@@ -70,25 +73,30 @@ public class UsuarioService {
         usuarioRepository.delete(usuario);
     }
 
-    public void verificarSeUsuarioExiste(Usuario usuario) throws PomboException{
+    public void verificarSeUsuarioExiste(Usuario usuario) throws PomboException {
 
         Optional<Usuario> usuarioComMesmoEmail = usuarioRepository.findByEmail(usuario.getEmail());
         Optional<Usuario> usuarioComMesmoCpf = usuarioRepository.findByCpf(usuario.getCpf());
 
-        if(usuario.getId() == null) {
+        if (usuario.getId() == null) {
             usuario.setId(0L);
         }
 
-        if(usuarioComMesmoEmail.isPresent()) {
-            if(!usuario.getId().equals(usuarioComMesmoEmail.get().getId())) {
+        if (usuarioComMesmoEmail.isPresent()) {
+            if (!usuario.getId().equals(usuarioComMesmoEmail.get().getId())) {
                 throw new PomboException("Email ja cadastrado!");
             }
         }
 
-        if(usuarioComMesmoCpf.isPresent()) {
-            if(!usuario.getId().equals(usuarioComMesmoCpf.get().getId())) {
+        if (usuarioComMesmoCpf.isPresent()) {
+            if (!usuario.getId().equals(usuarioComMesmoCpf.get().getId())) {
                 throw new PomboException("Cpf ja cadastrado!");
             }
         }
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return usuarioRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado" + username));
     }
 }
