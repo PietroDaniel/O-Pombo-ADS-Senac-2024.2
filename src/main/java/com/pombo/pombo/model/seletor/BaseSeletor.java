@@ -1,6 +1,7 @@
 package com.pombo.pombo.model.seletor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -27,33 +28,15 @@ public abstract class BaseSeletor {
         return this.limite * (this.pagina - 1);
     }
 
-    public static void aplicarFiltroPeriodo(Root<?> root,
-            CriteriaBuilder cb, List<Predicate> predicates,
-            Integer valorMinimo, Integer valorMaximo, String nomeAtributo) {
-        if (valorMinimo != null && valorMaximo != null) {
-            // WHERE atributo BETWEEN min AND max
-            predicates.add(cb.between(root.get(nomeAtributo), valorMinimo, valorMaximo));
-        } else if (valorMinimo != null) {
-            // WHERE atributo >= min
-            predicates.add(cb.greaterThanOrEqualTo(root.get(nomeAtributo), valorMinimo));
-        } else if (valorMaximo != null) {
-            // WHERE atributo <= max
-            predicates.add(cb.lessThanOrEqualTo(root.get(nomeAtributo), valorMaximo));
-        }
-    }
-
-    public static void aplicarFiltroPeriodo(Root<?> root,
-            CriteriaBuilder cb, List<Predicate> predicates,
-            LocalDate dataInicial, LocalDate dataFinal, String nomeAtributo) {
-        if (dataInicial != null && dataFinal != null) {
-            // WHERE atributo BETWEEN min AND max
-            predicates.add(cb.between(root.get(nomeAtributo), dataInicial, dataFinal));
-        } else if (dataInicial != null) {
-            // WHERE atributo >= min
-            predicates.add(cb.greaterThanOrEqualTo(root.get(nomeAtributo), dataInicial));
-        } else if (dataFinal != null) {
-            // WHERE atributo <= max
-            predicates.add(cb.lessThanOrEqualTo(root.get(nomeAtributo), dataFinal));
+    public static void aplicarFiltroPeriodo(Root root,
+                                            CriteriaBuilder cb, List<Predicate> predicates,
+                                            LocalDateTime startDate, LocalDateTime endDate, String attributeName) {
+        if (startDate != null && endDate != null) {
+            predicates.add(cb.between(root.get(attributeName), startDate, endDate));
+        } else if (startDate != null) {
+            predicates.add(cb.greaterThanOrEqualTo(root.get(attributeName), startDate));
+        } else if (endDate != null) {
+            predicates.add(cb.lessThanOrEqualTo(root.get(attributeName), endDate));
         }
     }
 

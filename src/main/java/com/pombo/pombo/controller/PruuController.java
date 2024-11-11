@@ -31,22 +31,15 @@ public class PruuController {
         return pruuService.listarTodos();
     }
 
-    public ResponseEntity<Pruu> buscarPorId(@PathVariable String uuid) throws PomboException {
-        Pruu pruu = pruuService.buscarPorId(uuid);
+    public ResponseEntity<PruuDTO> buscarPorId(@PathVariable String uuid) throws PomboException {
+        PruuDTO pruu = pruuService.buscarPorId(uuid);
         return ResponseEntity.ok(pruu);
     }
 
     @PostMapping
-    public ResponseEntity<Pruu> criarPruu(@RequestBody Pruu novoPruu) {
+    public ResponseEntity<Pruu> criarPruu(@RequestBody Pruu novoPruu) throws PomboException {
         Pruu pruuCriado = pruuService.criarPruu(novoPruu);
         return ResponseEntity.status(201).body(pruuCriado);
-    }
-
-    @PutMapping("/{uuid}")
-    public ResponseEntity<Pruu> atualizarPruu(@PathVariable String uuid, @RequestBody Pruu pruuAtualizado)
-            throws PomboException {
-        Pruu pruu = pruuService.atualizarPruu(uuid, pruuAtualizado);
-        return ResponseEntity.ok(pruu);
     }
 
     @DeleteMapping("/{uuid}")

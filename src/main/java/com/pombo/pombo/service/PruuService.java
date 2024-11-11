@@ -3,6 +3,7 @@ package com.pombo.pombo.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.pombo.pombo.utils.RSAEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,36 +21,35 @@ public class PruuService {
     @Autowired
     private PruuRepository pruuRepository;
 
+    @Autowired
+    private RSAEncoder rsaEncoder;
+
+    public Pruu criarPruu(Pruu novoPruu) throws PomboException {
+        if(novoPruu.getTexto().length() > 300) {
+            throw new PomboException("O texto deve ter entre 1 e 350 caracteres");
+        }
+
+        String textoCriptografado = rsaEncoder.encode(novoPruu.getTexto());
+
+        novoPruu.setTexto(textoCriptografado);
+
+        return pruuRepository.save(novoPruu);
+    }
+
     public List<Pruu> listarTodos() {
         return pruuRepository.findAll();
     }
 
-    public Pruu buscarPorId(String uuid) throws PomboException {
-        return pruuRepository.findById(uuid)
-                .orElseThrow(() -> new PomboException("Pruu não encontrado"));
+    public PruuDTO buscarPorId(String uuid) throws PomboException {
+        Pruu pruu = pruuRepository.findById(uuid).orElseThrow(() -> new PomboException("Pruu não encontrado"));
+        pruu.setTexto(rsaEncoder.decode(pruu.getTexto()));
+
+        Integer quantidadeLikes = pruu.getLikedByUsers().size();
+        Integer quantidadeDenuncias = pruu.getDenuncias().size();
+
+        return Pruu.paraDTO(pruu, quantidadeLikes, quantidadeDenuncias);
     }
 
-    public Pruu criarPruu(Pruu novoPruu) {
-        return pruuRepository.save(novoPruu);
-    }
-
-    public Pruu atualizarPruu(String uuid, Pruu pruuAtualizado) throws PomboException {
-        Pruu pruu = buscarPorId(uuid);
-        pruu.setTexto(pruuAtualizado.getTexto());
-        pruu.setImagem(pruuAtualizado.getImagem());
-        pruu.setBloqueado(pruuAtualizado.isBloqueado());
-        return pruuRepository.save(pruu);
-    }
-
-    public void excluirPruu(String uuid) throws PomboException {
-        Pruu pruu = buscarPorId(uuid);
-        if (!pruu.isBloqueado()) {
-            pruu.setBloqueado(true);
-            pruuRepository.save(pruu);
-        } else {
-            throw new PomboException("Pruu já está bloqueado");
-        }
-    }
 
     public List<Pruu> listarComFiltros(PruuSeletor seletor) {
         return pruuRepository.findAll((root, query, cb) -> {
@@ -82,7 +82,18 @@ public class PruuService {
 
             return cb.and(predicates.toArray(new Predicate[0]));
         });
+    };
+
+    public void excluirPruu(String uuid) throws PomboException {
+        Pruu pruu = buscarPorId(uuid);
+        if (!pruu.isBloqueado()) {
+            pruu.setBloqueado(true);
+            pruuRepository.save(pruu);
+        } else {
+            throw new PomboException("Pruu já está bloqueado");
+        }
     }
+
 
     public PruuDTO gerarRelatorioPruu(String uuid) throws PomboException {
         Pruu pruu = pruuRepository.findById(uuid)

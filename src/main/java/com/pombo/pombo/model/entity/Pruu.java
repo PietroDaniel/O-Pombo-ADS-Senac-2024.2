@@ -34,7 +34,7 @@ public class Pruu {
     private List<Denuncia> denuncias = new ArrayList<>();
 
     @NotBlank(message = "O texto do pruu é obrigatório")
-    @Size(min = 1, max = 350, message = "O texto deve ter entre 1 e 350 caracteres")
+    @Size(min = 1, max = 350, message = "O texto deve ter entre 1 e 300 caracteres")
     private String texto;
 
     @Column(name = "imagem")
