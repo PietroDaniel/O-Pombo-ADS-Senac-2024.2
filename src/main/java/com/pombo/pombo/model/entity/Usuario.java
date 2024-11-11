@@ -55,7 +55,7 @@ public class Usuario implements UserDetails{
 	private String foto;
 
     @NotBlank(message = "A senha é obrigatória")
-    @Size(min = 3)
+    @Size(max=500, min = 3)
     private String password;
     
     @Enumerated(EnumType.STRING)
