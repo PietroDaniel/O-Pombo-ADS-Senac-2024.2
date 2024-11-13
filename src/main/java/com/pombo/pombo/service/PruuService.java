@@ -2,9 +2,11 @@ package com.pombo.pombo.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.pombo.pombo.utils.RSAEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.pombo.pombo.exception.PomboException;
@@ -12,8 +14,6 @@ import com.pombo.pombo.model.dto.PruuDTO;
 import com.pombo.pombo.model.entity.Pruu;
 import com.pombo.pombo.model.repository.PruuRepository;
 import com.pombo.pombo.model.seletor.PruuSeletor;
-
-import jakarta.persistence.criteria.Predicate;
 
 @Service
 public class PruuService {
@@ -25,7 +25,7 @@ public class PruuService {
     private RSAEncoder rsaEncoder;
 
     public Pruu criarPruu(Pruu novoPruu) throws PomboException {
-        if(novoPruu.getTexto().length() > 300) {
+        if (novoPruu.getTexto().length() > 300) {
             throw new PomboException("O texto deve ter entre 1 e 350 caracteres");
         }
 
@@ -47,67 +47,78 @@ public class PruuService {
         Integer quantidadeLikes = pruu.getLikedByUsers().size();
         Integer quantidadeDenuncias = pruu.getDenuncias().size();
 
-        return Pruu.paraDTO(pruu, quantidadeLikes, quantidadeDenuncias);
+        return Pruu.paraDTO(pruu, quantidadeLikes, quantidadeDenuncias, null, null);
     }
 
 
-    public List<Pruu> listarComFiltros(PruuSeletor seletor) {
-        return pruuRepository.findAll((root, query, cb) -> {
-            List<Predicate> predicates = new ArrayList<>();
+    public List<PruuDTO> listarComFiltros(PruuSeletor seletor, Long subjectId) {
 
-            if (seletor.getTexto() != null && !seletor.getTexto().isEmpty()) {
-                predicates.add(cb.like(root.get("texto"), "%" + seletor.getTexto() + "%"));
-            }
+        List<Pruu> pruus;
 
-            if (seletor.getDataInicioCriacao() != null) {
-                predicates.add(cb.greaterThanOrEqualTo(root.get("dataHoraCriacao"), seletor.getDataInicioCriacao()));
-            }
+        if (seletor.temPaginacao()) {
+            int pageNumber = seletor.getPagina();
+            int pageSize = seletor.getLimite();
 
-            if (seletor.getDataFimCriacao() != null) {
-                predicates.add(cb.lessThanOrEqualTo(root.get("dataHoraCriacao"), seletor.getDataFimCriacao()));
-            }
-
-            if (seletor.getQuantidadeMinimaLikes() != null) {
-                predicates
-                        .add(cb.greaterThanOrEqualTo(root.get("quantidadeLikes"), seletor.getQuantidadeMinimaLikes()));
-            }
-
-            if (seletor.getBloqueado() != null) {
-                predicates.add(cb.equal(root.get("bloqueado"), seletor.getBloqueado()));
-            }
-
-            if (seletor.getUsuarioUuid() != null && !seletor.getUsuarioUuid().isEmpty()) {
-                predicates.add(cb.equal(root.get("usuario").get("uuid"), seletor.getUsuarioUuid()));
-            }
-
-            return cb.and(predicates.toArray(new Predicate[0]));
-        });
-    };
-
-    public void excluirPruu(String uuid) throws PomboException {
-        Pruu pruu = buscarPorId(uuid);
-        if (!pruu.isBloqueado()) {
-            pruu.setBloqueado(true);
-            pruuRepository.save(pruu);
+            PageRequest page = PageRequest.of(pageNumber - 1, pageSize);
+            pruus = pruuRepository.findAll(seletor, page).toList();
         } else {
-            throw new PomboException("Pruu já está bloqueado");
+            pruus = pruuRepository.findAll(seletor);
         }
+        pruus = removerPruusDeletadosBloqueados(pruus);
+
+        if (seletor.isEstaCurtido()) {
+            pruus = pruus.stream()
+                    .filter(pruu -> pruu.getLikedByUsers().stream()
+                            .anyMatch(usuario -> usuario.getId().equals(subjectId)))
+                    .collect(Collectors.toList());
+        }
+
+        return converterParaDTO(pruus);
     }
 
+    public void excluirPruu(String pruuid, Long usuarioID) throws PomboException {
 
-    public PruuDTO gerarRelatorioPruu(String uuid) throws PomboException {
-        Pruu pruu = pruuRepository.findById(uuid)
-                .orElseThrow(() -> new PomboException("Pruu não encontrado"));
+        Pruu pruu = pruuRepository.findById(pruuid).orElseThrow(() -> new PomboException("Pruu não encontrada!"));
 
-        PruuDTO dto = new PruuDTO();
-        String texto = pruu.isBloqueado() ? "Bloqueado pelo administrador" : pruu.getTexto();
-        dto.setTexto(texto);
-        dto.setNomeUsuario(pruu.getUsuario().getNome());
-        dto.setUuidUsuario(pruu.getUsuario().getId().toString());
-        dto.setQuantidadeDenuncias(pruu.getDenuncias().size());
+        if (!pruu.getUsuario().getId().equals(usuarioID)) {
+            throw new PomboException("Você não pode excluir um Pruu de outro usuário!");
+        }
 
-        return dto;
+        pruu.setExcluido(true);
+        pruuRepository.save(pruu);
+
     }
 
-    
+    public List<Pruu> removerPruusDeletadosBloqueados(List<Pruu> pruus) {
+        return pruus.stream()
+                .filter(pruu -> !pruu.isBloqueado() && !pruu.isExcluido())
+                .collect(Collectors.toList());
+    }
+
+    public List<PruuDTO> converterParaDTO(List<Pruu> pruus) {
+
+        List<PruuDTO> dtos = new ArrayList<>();
+
+        for (Pruu p : pruus) {
+            String pruuImagem = null;
+            String usuarioFotoPerfil = null;
+
+            p.setTexto(rsaEncoder.decode(p.getTexto()));
+
+            Integer quantidadeLikes = p.getLikedByUsers().size();
+            Integer quantidadeDenuncias = p.getDenuncias().size();
+
+            if (p.getImagem() != null) {
+                pruuImagem = null; //TODO
+            }
+
+            if (p.getUsuario().getFoto() != null) {
+                usuarioFotoPerfil = null; //TODO
+            }
+
+            PruuDTO dto = Pruu.paraDTO(p, quantidadeLikes, quantidadeDenuncias, pruuImagem, usuarioFotoPerfil);
+            dtos.add(dto);
+        }
+        return dtos;
+    }
 }

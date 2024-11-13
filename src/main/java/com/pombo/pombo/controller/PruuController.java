@@ -49,8 +49,8 @@ public class PruuController {
     }
 
     @PostMapping("/filtros")
-    public List<Pruu> listarComFiltros(@RequestBody PruuSeletor seletor) {
-        return pruuService.listarComFiltros(seletor);
+    public List<PruuDTO> listarComFiltros(@RequestBody PruuSeletor seletor) {
+        return pruuService.listarComFiltros(seletor,"123");
     }
 
     @PutMapping("/bloquear/{uuid}")

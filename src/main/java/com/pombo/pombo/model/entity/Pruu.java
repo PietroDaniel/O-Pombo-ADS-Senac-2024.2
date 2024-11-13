@@ -17,10 +17,10 @@ import lombok.Data;
 @Table(name = "pruus")
 
 public class Pruu {
-    @Id 
-	@UuidGenerator
+    @Id
+    @UuidGenerator
     @GeneratedValue(strategy = GenerationType.UUID)
-	private String id;
+    private String id;
 
     @ManyToOne
     @JoinColumn(name = "usuario_id", nullable = false)
@@ -46,14 +46,14 @@ public class Pruu {
     @Column(name = "data_hora_criacao", nullable = false, updatable = false)
     private LocalDateTime dataHoraCriacao = LocalDateTime.now();
 
-    public static PruuDTO paraDTO(Pruu pruu, Integer quantidadeLikes, Integer quantidadeDenuncias) {
+    public static PruuDTO paraDTO(Pruu pruu, Integer quantidadeLikes, Integer quantidadeDenuncias, String imagemPruu, String fotoPerfil) {
         return new PruuDTO(
                 pruu.getId(),
                 pruu.getTexto(),
-                pruu.getImagem(),
+                imagemPruu,
                 pruu.getUsuario().getId(),
                 pruu.getUsuario().getNome(),
-                pruu.getUsuario().getFoto(),
+                fotoPerfil,
                 quantidadeLikes,
                 quantidadeDenuncias,
                 pruu.getDataHoraCriacao()
