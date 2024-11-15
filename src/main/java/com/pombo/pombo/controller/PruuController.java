@@ -47,6 +47,24 @@ public class PruuController {
         }
     }
 
+    @PostMapping("/dar-like/{pruuId}")
+    public ResponseEntity<Void> darLike(@PathVariable String pruuId) throws PomboException {
+
+        Usuario subject = authService.getAuthenticatedUser();
+
+        if (subject.getRole() == Role.USER) {
+            pruuService.darLike(subject.getId(), pruuId);
+            return ResponseEntity.ok().build();
+        } else {
+            throw new PomboException("Administradores não podem dar likes em Pruus!");
+        }
+    }
+
+    @GetMapping("/buscar-likes-pruu/{pruuId}")
+    public List<Usuario> buscarLikesPruu(@PathVariable String pruuId) throws PomboException {
+        return pruuService.buscarLikesPruu(pruuId);
+    }
+
     @GetMapping("/{pruuId}")
     public ResponseEntity<PruuDTO> buscarPorId(@PathVariable String pruuId) throws PomboException {
 
