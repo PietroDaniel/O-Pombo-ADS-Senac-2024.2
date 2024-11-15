@@ -2,16 +2,13 @@ package com.pombo.pombo.model.entity;
 
 import java.time.LocalDateTime;
 
+import com.pombo.pombo.model.dto.DenunciaDTO;
+import com.pombo.pombo.model.enums.MotivoDenuncia;
+import com.pombo.pombo.model.enums.SituacaoDenuncia;
+import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UuidGenerator;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
 import lombok.Data;
 
 @Data
@@ -20,34 +17,40 @@ import lombok.Data;
 public class Denuncia {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     @UuidGenerator
-    private String uuid;
-
-    @Column(name = "data_hora_criacao", nullable = false)
-    private LocalDateTime dataHoraCriacao = LocalDateTime.now();
+    private String id;
 
     @ManyToOne
-    @JoinColumn(name = "denunciante_id", nullable = false)
+    @JoinColumn(name = "denunciante_id")
     private Usuario denunciante;
 
+    @ManyToOne
+    @JoinColumn(name = "pruu_id")
+    private Pruu pruu;
+
     @Enumerated(EnumType.STRING)
-    @Column(name = "motivo", nullable = false)
+    @Column(name = "motivo")
     private MotivoDenuncia motivo;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "situacao", nullable = false)
+    @Column(name = "situacao")
     private SituacaoDenuncia situacao = SituacaoDenuncia.PENDENTE;
 
-    public enum MotivoDenuncia {
-        SPAM, OFENSIVO, FALSO
-    }
+    @CreationTimestamp
+    private LocalDateTime dataCriacao;
 
-    public enum SituacaoDenuncia {
-        PENDENTE, ANALISADA
-    }
+    public static DenunciaDTO paraDenunciaDTO(Denuncia denuncia) {
+        return new DenunciaDTO(
+                denuncia.getId(),
+                denuncia.getDenunciante().getId(),
+                denuncia.getDenunciante().getNome(),
+                denuncia.getMotivo(),
+                denuncia.getSituacao(),
+                denuncia.getPruu().getId(),
+                denuncia.getDataCriacao()
+        );
 
-    @ManyToOne
-    @JoinColumn(name = "pruu_id", nullable = false)
-    private Pruu pruu;
+    }
 
 }

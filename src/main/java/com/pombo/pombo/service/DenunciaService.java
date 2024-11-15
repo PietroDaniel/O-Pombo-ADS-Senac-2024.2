@@ -18,7 +18,7 @@ public class DenunciaService {
     private DenunciaRepository denunciaRepository;
 
     public List<Denuncia> buscarDenunciasPorPruu(String pruuString) {
-        return denunciaRepository.findByPruuUuid(pruuString);
+        return denunciaRepository.findByPruuId(pruuString);
     }
 
     public void atualizarSituacao(String denunciaString, Denuncia.SituacaoDenuncia situacao) throws PomboException {
@@ -43,7 +43,7 @@ public class DenunciaService {
     }
 
     public List<DenunciaDTO> gerarRelatorioDenuncias(String pruuUuid) {
-        List<Denuncia> denuncias = denunciaRepository.findByPruuUuid(pruuUuid);
+        List<Denuncia> denuncias = denunciaRepository.findByPruuId(pruuUuid);
         int pendentes = (int) denuncias.stream().filter(d -> d.getSituacao() == Denuncia.SituacaoDenuncia.PENDENTE)
                 .count();
         int analisadas = (int) denuncias.stream().filter(d -> d.getSituacao() == Denuncia.SituacaoDenuncia.ANALISADA)

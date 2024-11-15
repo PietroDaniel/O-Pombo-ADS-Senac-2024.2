@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.pombo.pombo.model.dto.PruuDTO;
 import jakarta.persistence.*;
 import org.hibernate.annotations.UuidGenerator;
@@ -31,6 +32,7 @@ public class Pruu {
     private List<Usuario> likedByUsers = new ArrayList<>();
 
     @OneToMany(mappedBy = "pruu")
+    @JsonBackReference
     private List<Denuncia> denuncias = new ArrayList<>();
 
     @NotBlank(message = "O texto do pruu é obrigatório")
