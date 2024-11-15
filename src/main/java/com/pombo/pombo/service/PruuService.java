@@ -1,19 +1,20 @@
 package com.pombo.pombo.service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
+import com.pombo.pombo.exception.PomboException;
+import com.pombo.pombo.model.dto.PruuDTO;
+import com.pombo.pombo.model.entity.Pruu;
+import com.pombo.pombo.model.entity.Usuario;
+import com.pombo.pombo.model.repository.PruuRepository;
+import com.pombo.pombo.model.repository.UsuarioRepository;
+import com.pombo.pombo.model.seletor.PruuSeletor;
 import com.pombo.pombo.utils.RSAEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import com.pombo.pombo.exception.PomboException;
-import com.pombo.pombo.model.dto.PruuDTO;
-import com.pombo.pombo.model.entity.Pruu;
-import com.pombo.pombo.model.repository.PruuRepository;
-import com.pombo.pombo.model.seletor.PruuSeletor;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PruuService {
@@ -23,6 +24,8 @@ public class PruuService {
 
     @Autowired
     private RSAEncoder rsaEncoder;
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
     public Pruu criarPruu(Pruu novoPruu) throws PomboException {
         if (novoPruu.getTexto().length() > 300) {
@@ -35,6 +38,33 @@ public class PruuService {
 
         return pruuRepository.save(novoPruu);
     }
+
+    public void darLike(Long usuarioID, String pruuID) throws PomboException {
+
+        Pruu pruu = pruuRepository.findById(pruuID).orElseThrow(() -> new PomboException("Pruu não encontrado"));
+        Usuario usuario = usuarioRepository.findById(usuarioID).orElseThrow(() -> new PomboException("Usuário não encontrado"));
+
+        List<Usuario> likes = pruu.getLikedByUsers();
+
+        if (likes.contains(usuario)) {
+            likes.remove(usuario);
+        } else {
+            likes.add(usuario);
+        }
+
+        pruu.setLikedByUsers(likes);
+
+        pruuRepository.save(pruu);
+
+    }
+
+    public List<Usuario> buscarLikesPruu(String pruuId) throws PomboException {
+
+        Pruu pruu = pruuRepository.findById(pruuId).orElseThrow(() -> new PomboException("Pruu não encontrado"));
+
+        return pruu.getLikedByUsers();
+    }
+
 
     public List<Pruu> listarTodos() {
         return pruuRepository.findAll();
