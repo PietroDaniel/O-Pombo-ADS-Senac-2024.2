@@ -37,10 +37,11 @@ public class PruuSeletor extends BaseSeletor implements Specification<Pruu> {
         }
 
         if(this.getUsuarioId() != null) {
-            predicates.add(cb.equal(root.get("usuario"), this.getUsuarioId()));
+            predicates.add(cb.equal(root.get("usuario").get("id"), this.getUsuarioId()));
         }
 
-        aplicarFiltroPeriodo(root, cb, predicates, this.getDataInicioCriacao(), this.getDataFimCriacao(), "criadoEm");
+        aplicarFiltroPeriodo(root, cb, predicates, this.getDataInicioCriacao(),
+                this.getDataFimCriacao(), "criadoEm");
 
         return cb.and(predicates.toArray(new Predicate[0]));
     }
