@@ -105,9 +105,9 @@ public class PruuRepositoryTest {
         pruu.setUsuario(usuario);
         Pruu pruuSalvo = pruuRepository.save(pruu);
 
-        pruuRepository.deleteById(pruuSalvo.getUuid());
+        pruuRepository.deleteById(pruuSalvo.getId());
 
-        assertThatThrownBy(() -> pruuRepository.findById(pruuSalvo.getUuid())
+        assertThatThrownBy(() -> pruuRepository.findById(pruuSalvo.getId())
             .orElseThrow(() -> new RuntimeException("Pruu não encontrado")))
             .isInstanceOf(RuntimeException.class)
             .hasMessageContaining("Pruu não encontrado");
