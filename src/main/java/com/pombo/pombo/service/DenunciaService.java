@@ -35,8 +35,11 @@ public class DenunciaService {
         return denunciaRepository.findById(denunciaId).orElseThrow(() -> new PomboException("Esta denúncia não foi encontrada!"));
     }
 
-    public List<Denuncia> buscarDenunciasPorPruu(String pruuString) {
-        return denunciaRepository.findByPruuId(pruuString);
+    public List<DenunciaDTO> buscarDenunciasPorPruu(String pruuId) {
+
+        List<Denuncia> denuncias = denunciaRepository.findByPruuId(pruuId);
+
+        return denuncias.stream().map(Denuncia::paraDenunciaDTO).collect(Collectors.toList());
     }
 
     public void atualizarSituacao(String denunciaId, SituacaoDenuncia novaSituacao) throws PomboException {
