@@ -2,6 +2,7 @@ package com.pombo.pombo.auth;
 
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -23,6 +24,9 @@ import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
@@ -36,16 +40,42 @@ public class SecurityConfig {
 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf(csrf -> csrf.disable())
+        http
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(
+                        //Hierarquia de permissões e bloqueios
                         auth -> auth
-                                .requestMatchers("/auth/authenticate", "/auth/register").permitAll()
+                                //URLs liberadas
+                                .requestMatchers("/auth/*", "/public").permitAll()
+
+                                //Todas as demais são bloqueadas
                                 .anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults())
                 .oauth2ResourceServer(
                         conf -> conf.jwt(Customizer.withDefaults()));
 
         return http.build();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(List.of("http://localhost:4200")); // Libera a origem do Angular
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")); // Métodos HTTP permitidos
+        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "Access-Control-Allow-Origin",
+                "Access-Control-Allow-Headers", "Access-Control-Expose-Headers",
+                "Accept", "Origin", "X-Requested-With", "Access-Control-Request-Method",
+                "Access-Control-Request-Headers", "Access-Control-Allow-Credentials",
+                "Content-Length", "Content-Encoding", "Connection"
+        )); // Cabeçalhos permitidos
+
+        configuration.setAllowCredentials(true); // Permite envio de credenciais (cookies, por exemplo)
+        configuration.setAllowedOriginPatterns(List.of("http://localhost:4200/*"));
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 
     @Bean
