@@ -19,6 +19,7 @@ import com.pombo.pombo.model.repository.UsuarioRepository;
 import com.pombo.pombo.model.seletor.UsuarioSeletor;
 
 import jakarta.persistence.criteria.Predicate;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class UsuarioService implements UserDetailsService {
@@ -27,20 +28,24 @@ public class UsuarioService implements UserDetailsService {
     private UsuarioRepository usuarioRepository;
 
     @Autowired
-    private PruuRepository pruuRepository;
+    private ImagemService imagemService;
+
+    public void salvarFotoPerfil(MultipartFile foto, Long usuarioId) throws PomboException {
+
+        Usuario usuario = usuarioRepository.findById(usuarioId).orElseThrow(() -> new PomboException("Usuário não encontrado!"));
+        String imagemBase64 = imagemService.processarImagem(foto);
+        usuario.setFoto(imagemBase64);
+        usuarioRepository.save(usuario);
+    }
 
     public Usuario criarUsuario(Usuario novoUsuario) throws PomboException {
-
         verificarSeUsuarioExiste(novoUsuario);
-
         return usuarioRepository.save(novoUsuario);
     }
 
     public Usuario atualizarUsuario(Long id, Usuario usuarioAtualizado) throws PomboException {
-
         usuarioAtualizado.setId(id);
         verificarSeUsuarioExiste(usuarioAtualizado);
-
         return usuarioRepository.save(usuarioAtualizado);
     }
 

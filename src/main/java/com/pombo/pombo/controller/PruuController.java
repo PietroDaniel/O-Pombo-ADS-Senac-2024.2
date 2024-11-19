@@ -1,25 +1,23 @@
 package com.pombo.pombo.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import com.pombo.pombo.auth.AuthenticationService;
 import com.pombo.pombo.model.entity.Usuario;
 import com.pombo.pombo.model.enums.Role;
+import com.pombo.pombo.service.ImagemService;
+import com.pombo.pombo.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.pombo.pombo.exception.PomboException;
 import com.pombo.pombo.model.dto.PruuDTO;
 import com.pombo.pombo.model.entity.Pruu;
 import com.pombo.pombo.model.seletor.PruuSeletor;
 import com.pombo.pombo.service.PruuService;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/pruus")
@@ -31,6 +29,25 @@ public class PruuController {
 
     @Autowired
     private AuthenticationService authService;
+    @Autowired
+    private AuthenticationService authenticationService;
+    @Autowired
+    private UsuarioService usuarioService;
+
+    @PostMapping("/salvar-foto-pruu")
+    public void salvarFotoPruu(@RequestParam("foto") MultipartFile foto, @RequestParam("pruuId") String pruuId) throws IOException, PomboException {
+
+        Usuario subject = authenticationService.getAuthenticatedUser();
+
+        if (foto == null) {
+            throw new PomboException("Arquivo inválido!");
+        }
+
+        pruuService.salvarFotoPruu(foto, pruuId, subject.getId());
+
+
+    }
+
 
     @PostMapping
     public ResponseEntity<Pruu> criarPruu(@RequestBody Pruu novoPruu) throws PomboException {

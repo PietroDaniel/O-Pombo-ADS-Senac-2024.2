@@ -39,8 +39,8 @@ public class Pruu {
     @Size(min = 1, max = 350, message = "O texto deve ter entre 1 e 300 caracteres")
     private String texto;
 
-    @Column(name = "imagem")
-    private String imagem;
+    @Column(columnDefinition = "TEXT")
+    private String foto;
 
     private boolean bloqueado = false;
     private boolean excluido = false;
@@ -48,14 +48,14 @@ public class Pruu {
     @Column(name = "data_hora_criacao", nullable = false, updatable = false)
     private LocalDateTime dataHoraCriacao = LocalDateTime.now();
 
-    public static PruuDTO paraDTO(Pruu pruu, Integer quantidadeLikes, Integer quantidadeDenuncias, String imagemPruu, String fotoPerfil) {
+    public static PruuDTO paraDTO(Pruu pruu, Integer quantidadeLikes, Integer quantidadeDenuncias) {
         return new PruuDTO(
                 pruu.getId(),
                 pruu.getTexto(),
-                imagemPruu,
+                pruu.getFoto(),
                 pruu.getUsuario().getId(),
                 pruu.getUsuario().getNome(),
-                fotoPerfil,
+                pruu.getUsuario().getFoto(),
                 quantidadeLikes,
                 quantidadeDenuncias,
                 pruu.getDataHoraCriacao()

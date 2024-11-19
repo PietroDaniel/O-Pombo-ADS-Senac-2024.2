@@ -11,6 +11,7 @@ import com.pombo.pombo.utils.RSAEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,8 +25,27 @@ public class PruuService {
 
     @Autowired
     private RSAEncoder rsaEncoder;
+
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private ImagemService imagemService;
+
+
+    public void salvarFotoPruu(MultipartFile foto, String pruuId, Long usuarioId) throws PomboException {
+
+        Pruu pruu = pruuRepository.findById(pruuId).orElseThrow(() -> new PomboException("Pruu não encontrado"));
+
+        if (!pruu.getUsuario().getId().equals(usuarioId)) {
+            throw new PomboException("Você não pode alterar a imagem do Pruu de outro usuário!");
+        }
+
+        String imagemBase64 = imagemService.processarImagem(foto);
+        pruu.setFoto(imagemBase64);
+        pruuRepository.save(pruu);
+
+    }
 
     public Pruu criarPruu(Pruu novoPruu) throws PomboException {
         if (novoPruu.getTexto().length() > 300) {
@@ -138,7 +158,7 @@ public class PruuService {
             Integer quantidadeLikes = p.getLikedByUsers().size();
             Integer quantidadeDenuncias = p.getDenuncias().size();
 
-            if (p.getImagem() != null) {
+            if (p.getFoto() != null) {
                 pruuImagem = null; //TODO
             }
 

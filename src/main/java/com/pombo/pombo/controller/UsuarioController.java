@@ -1,7 +1,9 @@
 package com.pombo.pombo.controller;
 
+import java.io.IOException;
 import java.util.List;
 
+import com.pombo.pombo.auth.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,6 +12,7 @@ import com.pombo.pombo.model.entity.Usuario;
 import com.pombo.pombo.model.seletor.UsuarioSeletor;
 import com.pombo.pombo.service.UsuarioService;
 import com.pombo.pombo.exception.PomboException;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/usuarios")
@@ -17,6 +20,22 @@ public class UsuarioController {
 
     @Autowired
     private UsuarioService usuarioService;
+
+    @Autowired
+    private AuthenticationService authenticationService;
+
+    @PostMapping("/salvar-foto-perfil")
+    public void salvarFotoPerfil(@RequestParam("foto")MultipartFile foto) throws IOException, PomboException {
+
+        Usuario subject = authenticationService.getAuthenticatedUser();
+
+        if (foto == null) {
+            throw new PomboException("Arquivo inválido!");
+        }
+
+        usuarioService.salvarFotoPerfil(foto, subject.getId());
+
+    }
 
     @GetMapping
     public List<Usuario> listarTodos() {
