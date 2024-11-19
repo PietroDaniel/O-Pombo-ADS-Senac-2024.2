@@ -85,11 +85,6 @@ public class PruuService {
         return pruu.getLikedByUsers();
     }
 
-
-    public List<Pruu> listarTodos() {
-        return pruuRepository.findAll();
-    }
-
     public PruuDTO buscarPorId(String uuid) throws PomboException {
         Pruu pruu = pruuRepository.findById(uuid).orElseThrow(() -> new PomboException("Pruu não encontrado"));
         pruu.setTexto(rsaEncoder.decode(pruu.getTexto()));
@@ -97,7 +92,7 @@ public class PruuService {
         Integer quantidadeLikes = pruu.getLikedByUsers().size();
         Integer quantidadeDenuncias = pruu.getDenuncias().size();
 
-        return Pruu.paraDTO(pruu, quantidadeLikes, quantidadeDenuncias, null, null);
+        return Pruu.paraDTO(pruu, quantidadeLikes, quantidadeDenuncias);
     }
 
 
@@ -150,23 +145,12 @@ public class PruuService {
         List<PruuDTO> dtos = new ArrayList<>();
 
         for (Pruu p : pruus) {
-            String pruuImagem = null;
-            String usuarioFotoPerfil = null;
-
             p.setTexto(rsaEncoder.decode(p.getTexto()));
 
             Integer quantidadeLikes = p.getLikedByUsers().size();
             Integer quantidadeDenuncias = p.getDenuncias().size();
 
-            if (p.getFoto() != null) {
-                pruuImagem = null; //TODO
-            }
-
-            if (p.getUsuario().getFoto() != null) {
-                usuarioFotoPerfil = null; //TODO
-            }
-
-            PruuDTO dto = Pruu.paraDTO(p, quantidadeLikes, quantidadeDenuncias, pruuImagem, usuarioFotoPerfil);
+            PruuDTO dto = Pruu.paraDTO(p, quantidadeLikes, quantidadeDenuncias);
             dtos.add(dto);
         }
         return dtos;
