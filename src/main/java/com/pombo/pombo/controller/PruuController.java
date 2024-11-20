@@ -99,5 +99,4 @@ public class PruuController {
         pruuService.excluirPruu(pruuId, subject.getId());
         return ResponseEntity.noContent().build();
     }
-
 }
