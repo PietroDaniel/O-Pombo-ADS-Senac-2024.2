@@ -29,10 +29,9 @@ public class PruuController {
 
     @Autowired
     private AuthenticationService authService;
+
     @Autowired
     private AuthenticationService authenticationService;
-    @Autowired
-    private UsuarioService usuarioService;
 
     @PostMapping("/salvar-foto-pruu")
     public void salvarFotoPruu(@RequestParam("foto") MultipartFile foto, @RequestParam("pruuId") String pruuId) throws IOException, PomboException {
@@ -44,10 +43,7 @@ public class PruuController {
         }
 
         pruuService.salvarFotoPruu(foto, pruuId, subject.getId());
-
-
     }
-
 
     @PostMapping
     public ResponseEntity<Pruu> criarPruu(@RequestBody Pruu novoPruu) throws PomboException {
@@ -99,11 +95,8 @@ public class PruuController {
 
     @DeleteMapping("/{pruuId}")
     public ResponseEntity<Void> deletarPruu(@PathVariable String pruuId) throws PomboException {
-
         Usuario subject = authService.getAuthenticatedUser();
-
         pruuService.excluirPruu(pruuId, subject.getId());
-
         return ResponseEntity.noContent().build();
     }
 

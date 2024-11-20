@@ -43,8 +43,7 @@ public class UsuarioService implements UserDetailsService {
         return usuarioRepository.save(novoUsuario);
     }
 
-    public Usuario atualizarUsuario(Long id, Usuario usuarioAtualizado) throws PomboException {
-        usuarioAtualizado.setId(id);
+    public Usuario atualizarUsuario(Usuario usuarioAtualizado) throws PomboException {
         verificarSeUsuarioExiste(usuarioAtualizado);
         return usuarioRepository.save(usuarioAtualizado);
     }
