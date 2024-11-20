@@ -37,7 +37,7 @@ public class UsuarioController {
 
     }
 
-    @GetMapping
+    @GetMapping("/todos")
     public List<Usuario> listarTodos() {
         return usuarioService.listarTodos();
     }
@@ -48,7 +48,7 @@ public class UsuarioController {
         return ResponseEntity.ok(usuario);
     }
 
-    @PostMapping
+    @PostMapping("/novo")
     public ResponseEntity<Usuario> criarUsuario(@RequestBody Usuario novoUsuario) throws PomboException {
         Usuario usuarioCriado = usuarioService.criarUsuario(novoUsuario);
         return ResponseEntity.status(201).body(usuarioCriado);
