@@ -1,0 +1,237 @@
+{
+	"info": {
+		"_postman_id": "9e62dc61-cf3c-4adc-8d4e-aab481d719b1",
+		"name": "Pombo",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "28786422"
+	},
+	"item": [
+		{
+			"name": "Usuário",
+			"item": [
+				{
+					"name": "Autenticação",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "monstro@gmail.com",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "Senha123",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/pombo/auth/authenticate",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"pombo",
+								"auth",
+								"authenticate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cadastrar Usuario",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"nome\": \"Matheus o Gigante\",\r\n  \"email\": \"gigante@gmail.com\",\r\n  \"cpf\": \"239.617.630-70\",\r\n  \"password\" : \"Senha123\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/pombo/auth/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"pombo",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listar com Filtro",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"pagina\": 1,\r\n  \"limite\": 10\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/pombo/usuarios/filtros",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"pombo",
+								"usuarios",
+								"filtros"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Salvar foto perfil",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"nome\": \"Matheus o Gigante\",\r\n  \"email\": \"gigante@gmail.com\",\r\n  \"cpf\": \"239.617.630-70\",\r\n  \"password\" : \"Senha123\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/pombo/auth/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"pombo",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar por Id",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Atualizar Usuário",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJwb21ibyIsInN1YiI6InBpZXRyb2ZlcnJhenpvQGdtYWlsLmNvbSIsImV4cCI6MTczMjE2MjM2OSwiaWF0IjoxNzMyMTI2MzY5LCJ1c2VySWQiOjEsInJvbGVzIjoiVVNFUiJ9.IxbAyppBfrdlhRvIPG3rbAhiZXIqFYv5-k9UmXuJ-HwoHLWBp1I5oeOKaUgWC9EFjp7qfqPBk8bxL1tL0GkkdRQmX3mz4J_cn_DPY7Q2FM0bklfyxYj1sfJhelwBJc9EztNcfMEqT8k0_s9_x36acwUqv53-LaObytDW4BZ9cPnHJmjS8wU_uM8aRFyxz7Sz40vQB3BJblwQvWGo8RKZhGx-O4nSxrYNhqEKuZ7Ee1luzaD3j8_LzlW83b1PltEInG3kudsAugiD6gmIya1faUjPuMjOCWmWc720KUfVwR3Nr1TzyhkiEO8Yk1MYX3zfSPurR5ljnIi27CMT8XX44g",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"cpf\": \"624.031.590-77\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/pombo/api/usuarios/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"pombo",
+								"api",
+								"usuarios",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Deletar Usuario",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/pombo/api/usuarios/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"pombo",
+								"api",
+								"usuarios",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Pruu",
+			"item": [
+				{
+					"name": "Criar Pruu",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Listar com FIltros",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Denúncia",
+			"item": []
+		}
+	]
+}
