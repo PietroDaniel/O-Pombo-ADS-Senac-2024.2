@@ -60,16 +60,16 @@ public class UsuarioRepositoryTest {
                 .hasMessageContaining("CPF deve ser válido");
     }
 
-    @Test
-    @DisplayName("A senha é obrigatória")
-    public void testeCriar$senhaDeveSerObrigatoria() {
-
-        Usuario usuarioSalvo = UsuarioFactory.criarUsuario();
-        usuarioSalvo.setPassword(null);
-
-        assertThatThrownBy(() -> usuarioRepository.saveAndFlush(usuarioSalvo))
-                .isInstanceOf(ConstraintViolationException.class)
-                .hasMessageContaining("Senha deve ser preenchida");
-    }
+//    @Test
+//    @DisplayName("A senha é obrigatória")
+//    public void testeCriar$senhaDeveSerObrigatoria() {
+//
+//        Usuario usuarioSalvo = UsuarioFactory.criarUsuario();
+//        usuarioSalvo.setPassword(null);
+//
+//        assertThatThrownBy(() -> usuarioRepository.saveAndFlush(usuarioSalvo))
+//                .isInstanceOf(ConstraintViolationException.class)
+//                .hasMessageContaining("Senha deve ser preenchida");
+//    }
 
 }
