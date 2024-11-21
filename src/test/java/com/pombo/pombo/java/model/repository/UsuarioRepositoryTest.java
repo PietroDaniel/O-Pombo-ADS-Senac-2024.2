@@ -1,6 +1,7 @@
 package com.pombo.pombo.java.model.repository;
 
 import com.pombo.pombo.java.factories.UsuarioFactory;
+import com.pombo.pombo.java.utils.GeradorDeCPFs;
 import com.pombo.pombo.model.entity.Usuario;
 import com.pombo.pombo.model.repository.UsuarioRepository;
 import jakarta.validation.ConstraintViolationException;
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest
@@ -44,6 +46,30 @@ public class UsuarioRepositoryTest {
                 .hasMessageContaining("Email deve ser válido");
     }
 
+    @Test
+    @DisplayName("Deve aceitar apenas CPFs válidos")
+    public void testeCriar$cpfDeveSerValido() {
+        Usuario usuario = new Usuario();
+        usuario.setNome("Teste");
+        usuario.setEmail("teste@teste.com");
+        usuario.setCpf("123.456.789-00");
+        usuario.setPassword("Senha123");
 
+        assertThatThrownBy(() -> usuarioRepository.saveAndFlush(usuario))
+                .isInstanceOf(ConstraintViolationException.class)
+                .hasMessageContaining("CPF deve ser válido");
+    }
+
+    @Test
+    @DisplayName("A senha é obrigatória")
+    public void testeCriar$senhaDeveSerObrigatoria() {
+
+        Usuario usuarioSalvo = UsuarioFactory.criarUsuario();
+        usuarioSalvo.setPassword(null);
+
+        assertThatThrownBy(() -> usuarioRepository.saveAndFlush(usuarioSalvo))
+                .isInstanceOf(ConstraintViolationException.class)
+                .hasMessageContaining("Senha deve ser preenchida");
+    }
 
 }
