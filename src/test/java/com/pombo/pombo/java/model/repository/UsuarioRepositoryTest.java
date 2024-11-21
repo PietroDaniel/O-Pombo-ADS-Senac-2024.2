@@ -1,7 +1,6 @@
 package com.pombo.pombo.java.model.repository;
 
 import com.pombo.pombo.java.factories.UsuarioFactory;
-import com.pombo.pombo.java.utils.GeradorDeCPFs;
 import com.pombo.pombo.model.entity.Usuario;
 import com.pombo.pombo.model.repository.UsuarioRepository;
 import jakarta.validation.ConstraintViolationException;
@@ -23,9 +22,8 @@ public class UsuarioRepositoryTest {
     @Test
     @DisplayName("Não deve ser possível criar um usuário com nome com mais de 255 caracteres")
     public void testeCriar$nomeMaiorQue255Caracteres() {
-        String nome = "A";
         Usuario usuario = UsuarioFactory.criarUsuario();
-        usuario.setNome(nome.repeat(256));
+        usuario.setNome("A".repeat(256));
 
         assertThatThrownBy(() -> usuarioRepository.saveAndFlush(usuario))
                 .isInstanceOf(ConstraintViolationException.class)
@@ -35,11 +33,8 @@ public class UsuarioRepositoryTest {
     @Test
     @DisplayName("Email deve ser válido")
     public void testeCriar$emailDeveSerValido() {
-        Usuario usuario = new Usuario();
-        usuario.setNome("Teste");
-        usuario.setEmail("Teste");
-        usuario.setCpf("108.375.739-39");
-        usuario.setPassword("Senha123");
+        Usuario usuario = UsuarioFactory.criarUsuario();
+        usuario.setEmail("email_invalido");
 
         assertThatThrownBy(() -> usuarioRepository.saveAndFlush(usuario))
                 .isInstanceOf(ConstraintViolationException.class)
@@ -49,27 +44,22 @@ public class UsuarioRepositoryTest {
     @Test
     @DisplayName("Deve aceitar apenas CPFs válidos")
     public void testeCriar$cpfDeveSerValido() {
-        Usuario usuario = new Usuario();
-        usuario.setNome("Teste");
-        usuario.setEmail("teste@teste.com");
+        Usuario usuario = UsuarioFactory.criarUsuario();
         usuario.setCpf("123.456.789-00");
-        usuario.setPassword("Senha123");
 
         assertThatThrownBy(() -> usuarioRepository.saveAndFlush(usuario))
                 .isInstanceOf(ConstraintViolationException.class)
                 .hasMessageContaining("CPF deve ser válido");
     }
 
-//    @Test
-//    @DisplayName("A senha é obrigatória")
-//    public void testeCriar$senhaDeveSerObrigatoria() {
-//
-//        Usuario usuarioSalvo = UsuarioFactory.criarUsuario();
-//        usuarioSalvo.setPassword(null);
-//
-//        assertThatThrownBy(() -> usuarioRepository.saveAndFlush(usuarioSalvo))
-//                .isInstanceOf(ConstraintViolationException.class)
-//                .hasMessageContaining("Senha deve ser preenchida");
-//    }
+    @Test
+    @DisplayName("A senha é obrigatória")
+    public void testeCriar$senhaDeveSerObrigatoria() {
+        Usuario usuario = UsuarioFactory.criarUsuario();
+        usuario.setPassword(null);
 
+        assertThatThrownBy(() -> usuarioRepository.saveAndFlush(usuario))
+                .isInstanceOf(ConstraintViolationException.class)
+                .hasMessageContaining("A senha é obrigatória");
+    }
 }
