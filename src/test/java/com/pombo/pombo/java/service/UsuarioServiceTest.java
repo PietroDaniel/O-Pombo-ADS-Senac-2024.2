@@ -53,7 +53,7 @@ public class UsuarioServiceTest {
         assertThat(result.getNome()).isEqualTo(usuario.getNome());
         verify(usuarioRepository, times(1)).save(usuario);
     }
-    
+
     @Test
     @DisplayName("Deve atualizar um usuário com sucesso")
     public void testAtualizarUsuario_Sucesso() throws PomboException {
