@@ -6,8 +6,9 @@ import com.pombo.pombo.model.entity.Pruu;
 import com.pombo.pombo.model.entity.Usuario;
 import com.pombo.pombo.model.repository.PruuRepository;
 import com.pombo.pombo.model.repository.UsuarioRepository;
+import com.pombo.pombo.service.ImagemService;
 import com.pombo.pombo.service.PruuService;
-import jakarta.validation.ConstraintViolationException;
+import com.pombo.pombo.utils.RSAEncoder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,12 +16,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -31,6 +34,12 @@ public class PruuServiceTest {
 
     @Mock
     private UsuarioRepository usuarioRepository;
+
+    @Mock
+    private RSAEncoder rsaEncoder;
+
+    @Mock
+    private ImagemService imagemService;
 
     @InjectMocks
     private PruuService pruuService;
@@ -44,59 +53,116 @@ public class PruuServiceTest {
         usuario.setId(1L);
         usuario.setNome("João");
         usuario.setEmail("joao@example.com");
-        usuario.setCpf("123.456.789-09");
 
         pruu = new Pruu();
+        pruu.setId("pruu-01");
         pruu.setTexto("Texto de teste");
         pruu.setUsuario(usuario);
+        pruu.setLikedByUsers(new ArrayList<>());
     }
 
     @Test
-    @DisplayName("Deve salvar um Pruu com sucesso")
-    public void testSalvarPruuComSucesso() throws PomboException {
+    @DisplayName("Deve criar um Pruu com sucesso")
+    public void testCriarPruuComSucesso() throws PomboException {
+        when(rsaEncoder.encode("Texto de teste")).thenReturn("Texto Criptografado");
         when(pruuRepository.save(any(Pruu.class))).thenReturn(pruu);
 
-        Pruu pruuSalvo = pruuService.criarPruu(pruu);
+        Pruu resultado = pruuService.criarPruu(pruu);
 
-        assertNotNull(pruuSalvo);
-        assertEquals("Texto de teste", pruuSalvo.getTexto());
+        assertThat(resultado).isNotNull();
+        assertThat(resultado.getTexto()).isEqualTo("Texto Criptografado");
         verify(pruuRepository, times(1)).save(any(Pruu.class));
     }
 
     @Test
-    @DisplayName("Deve lançar exceção ao tentar salvar Pruu com texto inválido")
-    public void testSalvarPruuComTextoInvalido() {
-        pruu.setTexto(""); // Texto inválido (vazio)
+    @DisplayName("Deve lançar exceção ao criar Pruu com texto inválido")
+    public void testCriarPruuComTextoInvalido() {
+        pruu.setTexto("A".repeat(301)); // Texto maior que 300 caracteres
 
         assertThatThrownBy(() -> pruuService.criarPruu(pruu))
-            .isInstanceOf(ConstraintViolationException.class)
-            .hasMessageContaining("O texto do pruu é obrigatório");
+                .isInstanceOf(PomboException.class)
+                .hasMessageContaining("O texto deve ter entre 1 e 350 caracteres");
 
-        verify(pruuRepository, times(0)).save(any(Pruu.class));
+        verify(pruuRepository, never()).save(any(Pruu.class));
     }
 
     @Test
-    @DisplayName("Deve buscar um Pruu por ID com sucesso")
-    public void testBuscarPruuPorIdComSucesso() throws PomboException {
-        when(pruuRepository.findById(anyString())).thenReturn(Optional.of(pruu));
+    @DisplayName("Deve salvar a foto do Pruu com sucesso")
+    public void testSalvarFotoPruuComSucesso() throws PomboException {
+        MultipartFile fotoMock = mock(MultipartFile.class);
+        when(imagemService.processarImagem(fotoMock)).thenReturn("base64Imagem");
+        when(pruuRepository.findById("pruu-01")).thenReturn(Optional.of(pruu));
+        when(pruuRepository.save(any(Pruu.class))).thenReturn(pruu);
 
-        PruuDTO pruuEncontrado = pruuService.buscarPorId("uuid-pruu");
+        pruuService.salvarFotoPruu(fotoMock, "pruu-01", usuario.getId());
 
-        assertNotNull(pruuEncontrado);
-//        assertEquals(pruu.getTexto(), pruuEncontrado.getTexto());
-        verify(pruuRepository, times(1)).findById(anyString());
+        assertThat(pruu.getFoto()).isEqualTo("base64Imagem");
+        verify(pruuRepository, times(1)).save(pruu);
     }
 
     @Test
-    @DisplayName("Deve lançar exceção ao buscar um Pruu com UUID inválido")
+    @DisplayName("Deve lançar exceção ao salvar foto para Pruu inexistente")
+    public void testSalvarFotoPruuInexistente() {
+        MultipartFile fotoMock = mock(MultipartFile.class);
+
+        when(pruuRepository.findById("pruu-01")).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> pruuService.salvarFotoPruu(fotoMock, "pruu-01", usuario.getId()))
+                .isInstanceOf(PomboException.class)
+                .hasMessageContaining("Pruu não encontrado");
+
+        verify(pruuRepository, never()).save(any(Pruu.class));
+    }
+
+    @Test
+    @DisplayName("Deve dar like em um Pruu com sucesso")
+    public void testDarLikeEmPruuComSucesso() throws PomboException {
+        when(pruuRepository.findById("pruu-01")).thenReturn(Optional.of(pruu));
+        when(usuarioRepository.findById(1L)).thenReturn(Optional.of(usuario));
+        when(pruuRepository.save(any(Pruu.class))).thenReturn(pruu);
+
+        pruuService.darLike(1L, "pruu-01");
+
+        assertThat(pruu.getLikedByUsers()).contains(usuario);
+        verify(pruuRepository, times(1)).save(pruu);
+    }
+
+    @Test
+    @DisplayName("Deve lançar exceção ao buscar um Pruu inexistente por ID")
     public void testBuscarPruuPorIdInvalido() {
-        when(pruuRepository.findById(anyString())).thenReturn(Optional.empty());
+        when(pruuRepository.findById("id-invalido")).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> pruuService.buscarPorId("uuid-invalido"))
-            .isInstanceOf(PomboException.class)
-            .hasMessageContaining("Pruu não encontrado");
+        assertThatThrownBy(() -> pruuService.buscarPorId("id-invalido"))
+                .isInstanceOf(PomboException.class)
+                .hasMessageContaining("Pruu não encontrado");
 
-        verify(pruuRepository, times(1)).findById(anyString());
+        verify(pruuRepository, times(1)).findById("id-invalido");
     }
 
+    @Test
+    @DisplayName("Deve excluir um Pruu com sucesso")
+    public void testExcluirPruuComSucesso() throws PomboException {
+        when(pruuRepository.findById("pruu-01")).thenReturn(Optional.of(pruu));
+
+        pruuService.excluirPruu("pruu-01", usuario.getId());
+
+        assertThat(pruu.isExcluido()).isTrue();
+        verify(pruuRepository, times(1)).save(pruu);
+    }
+
+    @Test
+    @DisplayName("Deve lançar exceção ao excluir um Pruu de outro usuário")
+    public void testExcluirPruuDeOutroUsuario() {
+        Usuario outroUsuario = new Usuario();
+        outroUsuario.setId(2L);
+        pruu.setUsuario(outroUsuario);
+
+        when(pruuRepository.findById("pruu-01")).thenReturn(Optional.of(pruu));
+
+        assertThatThrownBy(() -> pruuService.excluirPruu("pruu-01", usuario.getId()))
+                .isInstanceOf(PomboException.class)
+                .hasMessageContaining("Você não pode excluir um Pruu de outro usuário!");
+
+        verify(pruuRepository, never()).save(any(Pruu.class));
+    }
 }
