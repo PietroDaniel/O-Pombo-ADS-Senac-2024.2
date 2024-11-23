@@ -48,10 +48,18 @@ public class PruuService {
     }
 
     public Pruu criarPruu(Pruu novoPruu) throws PomboException {
-        if (novoPruu.getTexto().length() > 300) {
-            throw new PomboException("O texto deve ter entre 1 e 350 caracteres");
+    	if (novoPruu.getTexto() == null) {
+            throw new PomboException("Seja criativo, digite algo!");
         }
 
+        if (novoPruu.getTexto().isBlank()) {
+            throw new PomboException("O texto do Pruu não pode estar vazio ou conter apenas espaços.");
+        }
+
+        if (novoPruu.getTexto().length() < 1 || novoPruu.getTexto().length() > 300) {
+            throw new PomboException("O texto deve ter entre 1 e 300 caracteres.");
+        }
+        
        // String textoCriptografado = rsaEncoder.encode(novoPruu.getTexto());
 
        // novoPruu.setTexto(textoCriptografado);
@@ -87,7 +95,7 @@ public class PruuService {
 
     public PruuDTO buscarPorId(String uuid) throws PomboException {
         Pruu pruu = pruuRepository.findById(uuid).orElseThrow(() -> new PomboException("Pruu não encontrado"));
-        pruu.setTexto(rsaEncoder.decode(pruu.getTexto()));
+        //pruu.setTexto(rsaEncoder.decode(pruu.getTexto()));
 
         Integer quantidadeLikes = pruu.getLikedByUsers().size();
         Integer quantidadeDenuncias = pruu.getDenuncias().size();
@@ -145,7 +153,7 @@ public class PruuService {
         List<PruuDTO> dtos = new ArrayList<>();
 
         for (Pruu p : pruus) {
-            p.setTexto(rsaEncoder.decode(p.getTexto()));
+           // p.setTexto(rsaEncoder.decode(p.getTexto()));
 
             Integer quantidadeLikes = p.getLikedByUsers().size();
             Integer quantidadeDenuncias = p.getDenuncias().size();
