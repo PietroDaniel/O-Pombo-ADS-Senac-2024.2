@@ -10,6 +10,36 @@
 			"name": "Autenticação",
 			"item": [
 				{
+					"name": "Register (Cadastrar Usuário)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"nome\": \"Pietro Ferrazzo\",\r\n  \"email\": \"pietroferrazzo@gmail.com\",\r\n  \"cpf\": \"103.323.240-87\",\r\n  \"password\" : \"Senha123\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/pombo/auth/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"pombo",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Autenticação",
 					"request": {
 						"auth": {
@@ -40,36 +70,6 @@
 								"pombo",
 								"auth",
 								"authenticate"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Register (Cadastrar Usuário)",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n  \"nome\": \"Pietro Ferrazzo\",\r\n  \"email\": \"pietroferrazzo@gmail.com\",\r\n  \"cpf\": \"103.323.240-87\",\r\n  \"password\" : \"Senha123\"\r\n}\r\n",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8080/pombo/auth/register",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"pombo",
-								"auth",
-								"register"
 							]
 						}
 					},
@@ -606,39 +606,6 @@
 					"response": []
 				},
 				{
-					"name": "Buscar Denúncias Por Pruu",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJwb21ibyIsInN1YiI6ImFkbWluQGdtYWlsLmNvbSIsImV4cCI6MTczMjQyMjA2NSwiaWF0IjoxNzMyMzg2MDY1LCJ1c2VySWQiOjIsInJvbGVzIjoiVVNFUiJ9.RLr0gdboaoxHPZ5YtKoXe3msAURefu4O5FY0aqbR5Icbizz6brNU67BePunIViC5YGqS0vvNHixURQSrCNK7rYIVf06Z-1fO9TtHvqLe5YUqjHbegcaDzHWHfhXkNNcz1lvnjGIw84-uh-EyeSqd2_IoGuZQOABenVUVq5ndtHKo1rVfn0fEHOwhxPCMGMUoe78roBx5sndb-o_wPjgQp-1VOftb90beXHCw0K8o-5M9VAcj2tu1VahAvWuxPdfWYdbuEa1JKjuoJTjbpDoctsEJrlF3XhMBAwIMVs1CD5NjnUk_2pcRTVimF8Dat_6YNGwnlIFQThDwM04-nUfuDg",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8080/pombo/api/denuncias/pruu/25ac8244-92da-432e-9976-e45270b5572a",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"pombo",
-								"api",
-								"denuncias",
-								"pruu",
-								"25ac8244-92da-432e-9976-e45270b5572a"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "Listar Denúncias com Filtros",
 					"request": {
 						"auth": {
@@ -674,6 +641,39 @@
 								"api",
 								"denuncias",
 								"filtros"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar Denúncias Por Pruu",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJwb21ibyIsInN1YiI6ImFkbWluQGdtYWlsLmNvbSIsImV4cCI6MTczMjQyMjA2NSwiaWF0IjoxNzMyMzg2MDY1LCJ1c2VySWQiOjIsInJvbGVzIjoiVVNFUiJ9.RLr0gdboaoxHPZ5YtKoXe3msAURefu4O5FY0aqbR5Icbizz6brNU67BePunIViC5YGqS0vvNHixURQSrCNK7rYIVf06Z-1fO9TtHvqLe5YUqjHbegcaDzHWHfhXkNNcz1lvnjGIw84-uh-EyeSqd2_IoGuZQOABenVUVq5ndtHKo1rVfn0fEHOwhxPCMGMUoe78roBx5sndb-o_wPjgQp-1VOftb90beXHCw0K8o-5M9VAcj2tu1VahAvWuxPdfWYdbuEa1JKjuoJTjbpDoctsEJrlF3XhMBAwIMVs1CD5NjnUk_2pcRTVimF8Dat_6YNGwnlIFQThDwM04-nUfuDg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/pombo/api/denuncias/pruu/25ac8244-92da-432e-9976-e45270b5572a",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"pombo",
+								"api",
+								"denuncias",
+								"pruu",
+								"25ac8244-92da-432e-9976-e45270b5572a"
 							]
 						}
 					},
