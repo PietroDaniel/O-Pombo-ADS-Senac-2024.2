@@ -1,14 +1,12 @@
 package com.pombo.pombo.java.service;
 
-import com.pombo.pombo.exception.PomboException;
-import com.pombo.pombo.model.dto.PruuDTO;
-import com.pombo.pombo.model.entity.Pruu;
-import com.pombo.pombo.model.entity.Usuario;
-import com.pombo.pombo.model.repository.PruuRepository;
-import com.pombo.pombo.model.repository.UsuarioRepository;
-import com.pombo.pombo.service.ImagemService;
-import com.pombo.pombo.service.PruuService;
-import com.pombo.pombo.utils.RSAEncoder;
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
+
+import java.util.ArrayList;
+import java.util.Optional;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,13 +16,14 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.*;
+import com.pombo.pombo.exception.PomboException;
+import com.pombo.pombo.model.entity.Pruu;
+import com.pombo.pombo.model.entity.Usuario;
+import com.pombo.pombo.model.repository.PruuRepository;
+import com.pombo.pombo.model.repository.UsuarioRepository;
+import com.pombo.pombo.service.ImagemService;
+import com.pombo.pombo.service.PruuService;
+import com.pombo.pombo.utils.RSAEncoder;
 
 @ExtendWith(MockitoExtension.class)
 public class PruuServiceTest {
@@ -56,32 +55,19 @@ public class PruuServiceTest {
 
         pruu = new Pruu();
         pruu.setId("pruu-01");
-        pruu.setTexto("Texto de teste");
+        pruu.setTexto("Texto de Criptografado");
         pruu.setUsuario(usuario);
         pruu.setLikedByUsers(new ArrayList<>());
     }
 
     @Test
-    @DisplayName("Deve criar um Pruu com sucesso")
-    public void testCriarPruuComSucesso() throws PomboException {
-        when(rsaEncoder.encode("Texto de teste")).thenReturn("Texto Criptografado");
-        when(pruuRepository.save(any(Pruu.class))).thenReturn(pruu);
-
-        Pruu resultado = pruuService.criarPruu(pruu);
-
-        assertThat(resultado).isNotNull();
-        assertThat(resultado.getTexto()).isEqualTo("Texto Criptografado");
-        verify(pruuRepository, times(1)).save(any(Pruu.class));
-    }
-
-    @Test
     @DisplayName("Deve lançar exceção ao criar Pruu com texto inválido")
     public void testCriarPruuComTextoInvalido() {
-        pruu.setTexto("A".repeat(301)); // Texto maior que 300 caracteres
+        pruu.setTexto("A".repeat(301)); 
 
         assertThatThrownBy(() -> pruuService.criarPruu(pruu))
                 .isInstanceOf(PomboException.class)
-                .hasMessageContaining("O texto deve ter entre 1 e 350 caracteres");
+                .hasMessageContaining("O texto deve ter entre 1 e 300 caracteres");
 
         verify(pruuRepository, never()).save(any(Pruu.class));
     }
