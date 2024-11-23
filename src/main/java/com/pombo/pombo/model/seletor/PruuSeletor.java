@@ -22,6 +22,9 @@ public class PruuSeletor extends BaseSeletor implements Specification<Pruu> {
     private LocalDateTime dataInicioCriacao;
     private LocalDateTime dataFimCriacao;
     private Integer usuarioId;
+    private String usuarioNome;
+    private String excluido;
+    private String bloqueado;
 
     @JsonProperty("estaCurtido")
     private boolean estaCurtido;
@@ -38,6 +41,31 @@ public class PruuSeletor extends BaseSeletor implements Specification<Pruu> {
 
         if(this.getUsuarioId() != null) {
             predicates.add(cb.equal(root.get("usuario").get("id"), this.getUsuarioId()));
+        }
+
+        if (this.getUsuarioNome() != null && !this.getUsuarioNome().trim().isEmpty()) {
+
+            predicates.add(cb.like(root.get("usuario").get("nome"), "%" + this.getUsuarioNome() + "%"));
+        }
+
+        if(this.getExcluido()!= null) {
+
+            boolean excluido = false;
+            if (this.getBloqueado().equalsIgnoreCase("true")){
+                excluido=true;
+            }
+
+            predicates.add(cb.equal(root.get("excluido"), excluido));
+        }
+
+        if(this.getBloqueado() != null) {
+
+            boolean bloqueado = false;
+            if (this.getBloqueado().equalsIgnoreCase("true")){
+              bloqueado=true;
+            }
+            predicates.add(cb.equal(root.get("bloqueado"), bloqueado));
+
         }
 
         aplicarFiltroPeriodo(root, cb, predicates, this.getDataInicioCriacao(),

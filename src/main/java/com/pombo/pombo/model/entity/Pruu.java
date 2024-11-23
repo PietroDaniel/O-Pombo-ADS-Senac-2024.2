@@ -58,7 +58,9 @@ public class Pruu {
                 pruu.getUsuario().getFoto(),
                 quantidadeLikes,
                 quantidadeDenuncias,
-                pruu.getDataHoraCriacao()
+                pruu.getDataHoraCriacao(),
+                pruu.isExcluido(),
+                pruu.isBloqueado()
         );
     }
 }

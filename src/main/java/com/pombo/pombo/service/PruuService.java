@@ -106,7 +106,7 @@ public class PruuService {
 
     public List<PruuDTO> listarComFiltros(PruuSeletor seletor, Long subjectId) {
 
-        List<Pruu> pruus;
+        List<Pruu> pruus = new ArrayList<>();
 
         if (seletor.temPaginacao()) {
             int pageNumber = seletor.getPagina();
@@ -114,10 +114,7 @@ public class PruuService {
 
             PageRequest page = PageRequest.of(pageNumber - 1, pageSize);
             pruus = pruuRepository.findAll(seletor, page).toList();
-        } else {
-            pruus = pruuRepository.findAll(seletor);
         }
-        pruus = removerPruusDeletadosBloqueados(pruus);
 
         if (seletor.isEstaCurtido()) {
             pruus = pruus.stream()
