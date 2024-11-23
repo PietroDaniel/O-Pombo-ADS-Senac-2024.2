@@ -7,7 +7,7 @@
 	},
 	"item": [
 		{
-			"name": "Usuário",
+			"name": "Autenticação",
 			"item": [
 				{
 					"name": "Autenticação",
@@ -17,12 +17,12 @@
 							"basic": [
 								{
 									"key": "username",
-									"value": "monstro@gmail.com",
+									"value": "pietrofdaniel@gmail.com",
 									"type": "string"
 								},
 								{
 									"key": "password",
-									"value": "Senha123",
+									"value": "senha123",
 									"type": "string"
 								}
 							]
@@ -46,13 +46,48 @@
 					"response": []
 				},
 				{
-					"name": "Cadastrar Usuario",
+					"name": "Register (Cadastrar Usuário)",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"nome\": \"Matheus o Gigante\",\r\n  \"email\": \"gigante@gmail.com\",\r\n  \"cpf\": \"239.617.630-70\",\r\n  \"password\" : \"Senha123\"\r\n}\r\n",
+							"raw": "{\r\n  \"nome\": \"Pietro Ferrazzo\",\r\n  \"email\": \"pietroferrazzo@gmail.com\",\r\n  \"cpf\": \"103.323.240-87\",\r\n  \"password\" : \"Senha123\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/pombo/auth/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"pombo",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Usuário",
+			"item": [
+				{
+					"name": "Cadastrar Usuário",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"nome\": \"Admin\",\r\n  \"email\": \"admin@gmail.com\",\r\n  \"cpf\": \"465.557.350-31\",\r\n  \"password\" : \"senha123\"\r\n}\r\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -78,11 +113,21 @@
 				{
 					"name": "Listar com Filtro",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJwb21ibyIsInN1YiI6InBpZXRyb2ZkYW5pZWxAZ21haWwuY29tIiwiZXhwIjoxNzMyMDkxNDgzLCJpYXQiOjE3MzIwNTU0ODMsInVzZXJJZCI6MSwicm9sZXMiOiJVU0VSIn0.oXTWwWUqPLAKCTA2PK5wPvdo4JJA9cN30Im2Ql5WsfQni-PUy8TOmZJkBprB7G2uRhR6WhbIgBpHbtg-UEClhPDvp4M4KGDM5YRY6e7PKSTATPEsRJSSCSP-S_3T7my4aufHyyMX29HweqvXAHKhuU3f4rIvF_zJDoOcSS_u_ON6-E5MTzZNzzm1UeaWbQxOE48pd7vmjsh6kRUX_jBOJ9VZvaEsjTxvk21b3j3R2C11dtKva7FMoUpsFfk8QZi1cIHBa9GdmiN-o_nQwXGCZI5wgQ-t_cFnjNju-9MCJ92uylxD7px6g93hSMtMGE9nwlvgnIXK1i4NZwNyCRUJwA",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"pagina\": 1,\r\n  \"limite\": 10\r\n}\r\n",
+							"raw": "{\r\n  \"pagina\": 1,\r\n  \"limite\": 5\r\n}\r\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -90,7 +135,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/pombo/usuarios/filtros",
+							"raw": "http://localhost:8080/pombo/api/usuarios/filtros",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -98,6 +143,7 @@
 							"port": "8080",
 							"path": [
 								"pombo",
+								"api",
 								"usuarios",
 								"filtros"
 							]
@@ -108,19 +154,30 @@
 				{
 					"name": "Salvar foto perfil",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJwb21ibyIsInN1YiI6InBpZXRyb2ZkYW5pZWxAZ21haWwuY29tIiwiZXhwIjoxNzMyMDkxNDgzLCJpYXQiOjE3MzIwNTU0ODMsInVzZXJJZCI6MSwicm9sZXMiOiJVU0VSIn0.oXTWwWUqPLAKCTA2PK5wPvdo4JJA9cN30Im2Ql5WsfQni-PUy8TOmZJkBprB7G2uRhR6WhbIgBpHbtg-UEClhPDvp4M4KGDM5YRY6e7PKSTATPEsRJSSCSP-S_3T7my4aufHyyMX29HweqvXAHKhuU3f4rIvF_zJDoOcSS_u_ON6-E5MTzZNzzm1UeaWbQxOE48pd7vmjsh6kRUX_jBOJ9VZvaEsjTxvk21b3j3R2C11dtKva7FMoUpsFfk8QZi1cIHBa9GdmiN-o_nQwXGCZI5wgQ-t_cFnjNju-9MCJ92uylxD7px6g93hSMtMGE9nwlvgnIXK1i4NZwNyCRUJwA",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
-							"mode": "raw",
-							"raw": "{\r\n  \"nome\": \"Matheus o Gigante\",\r\n  \"email\": \"gigante@gmail.com\",\r\n  \"cpf\": \"239.617.630-70\",\r\n  \"password\" : \"Senha123\"\r\n}\r\n",
-							"options": {
-								"raw": {
-									"language": "json"
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "foto",
+									"type": "file",
+									"src": "/C:/Users/Pietro/Desktop/palcoaberto_09jun24_@imperioteca_7.jpg"
 								}
-							}
+							]
 						},
 						"url": {
-							"raw": "http://localhost:8080/pombo/auth/register",
+							"raw": "http://localhost:8080/pombo/api/usuarios/salvar-foto-perfil",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -128,8 +185,9 @@
 							"port": "8080",
 							"path": [
 								"pombo",
-								"auth",
-								"register"
+								"api",
+								"usuarios",
+								"salvar-foto-perfil"
 							]
 						}
 					},
@@ -138,35 +196,18 @@
 				{
 					"name": "Buscar por Id",
 					"request": {
-						"method": "GET",
-						"header": []
-					},
-					"response": []
-				},
-				{
-					"name": "Atualizar Usuário",
-					"request": {
 						"auth": {
 							"type": "bearer",
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJwb21ibyIsInN1YiI6InBpZXRyb2ZlcnJhenpvQGdtYWlsLmNvbSIsImV4cCI6MTczMjE2MjM2OSwiaWF0IjoxNzMyMTI2MzY5LCJ1c2VySWQiOjEsInJvbGVzIjoiVVNFUiJ9.IxbAyppBfrdlhRvIPG3rbAhiZXIqFYv5-k9UmXuJ-HwoHLWBp1I5oeOKaUgWC9EFjp7qfqPBk8bxL1tL0GkkdRQmX3mz4J_cn_DPY7Q2FM0bklfyxYj1sfJhelwBJc9EztNcfMEqT8k0_s9_x36acwUqv53-LaObytDW4BZ9cPnHJmjS8wU_uM8aRFyxz7Sz40vQB3BJblwQvWGo8RKZhGx-O4nSxrYNhqEKuZ7Ee1luzaD3j8_LzlW83b1PltEInG3kudsAugiD6gmIya1faUjPuMjOCWmWc720KUfVwR3Nr1TzyhkiEO8Yk1MYX3zfSPurR5ljnIi27CMT8XX44g",
+									"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJwb21ibyIsInN1YiI6InBpZXRyb0BnbWFpbC5jb20iLCJleHAiOjE3MzI0MTcwNDUsImlhdCI6MTczMjM4MTA0NSwidXNlcklkIjoxLCJyb2xlcyI6IlVTRVIifQ.NMoMzQiGuwskIpWMy7X0Kpq6P_RjmEfbOkL6BvHgcbh9TDvREIggNL7XO3PsOm_w8yqaHr4OE0ziYXzPaU9QLZogPvdGEjxU2npwNqqGpwMsQKinOMjTt6CzyBBOvxopD21uVGAp-0LvohAVfN24qv2IokmpxSMyhFaBm3ypvirZwh87bewYdQDnWObZuUc4qY2mwPGBCNu7Wo3u5QAKjBWwzGR1CNO2hGak0MV18HvPsz2EwpPgRGpCoV3JtOo8toI7yr_wtyVVB7UUHo48aMnORfiBKyR9gZgLWmgnGcIMOa4J0bQlbT3uKPw-ex55gkgoOxhLatcSkV_kBAnSdA",
 									"type": "string"
 								}
 							]
 						},
-						"method": "PUT",
+						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"cpf\": \"624.031.590-77\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
 						"url": {
 							"raw": "http://localhost:8080/pombo/api/usuarios/1",
 							"protocol": "http",
@@ -185,8 +226,58 @@
 					"response": []
 				},
 				{
-					"name": "Deletar Usuario",
+					"name": "Atualizar Usuário",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJwb21ibyIsInN1YiI6ImFkbWluQGdtYWlsLmNvbSIsImV4cCI6MTczMjQyMjA2NSwiaWF0IjoxNzMyMzg2MDY1LCJ1c2VySWQiOjIsInJvbGVzIjoiVVNFUiJ9.RLr0gdboaoxHPZ5YtKoXe3msAURefu4O5FY0aqbR5Icbizz6brNU67BePunIViC5YGqS0vvNHixURQSrCNK7rYIVf06Z-1fO9TtHvqLe5YUqjHbegcaDzHWHfhXkNNcz1lvnjGIw84-uh-EyeSqd2_IoGuZQOABenVUVq5ndtHKo1rVfn0fEHOwhxPCMGMUoe78roBx5sndb-o_wPjgQp-1VOftb90beXHCw0K8o-5M9VAcj2tu1VahAvWuxPdfWYdbuEa1JKjuoJTjbpDoctsEJrlF3XhMBAwIMVs1CD5NjnUk_2pcRTVimF8Dat_6YNGwnlIFQThDwM04-nUfuDg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n \"nome\": \"Admin\",\r\n  \"email\": \"admin@gmail.com\",\r\n  \"cpf\": \"465.557.350-31\",\r\n  \"password\" : \"senha123\",\r\n  \"role\": \"ADMIN\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/pombo/api/usuarios",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"pombo",
+								"api",
+								"usuarios"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Deletar Usuário",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJwb21ibyIsInN1YiI6InBpZXRyb2ZlcnJhenpvQGdtYWlsLmNvbSIsImV4cCI6MTczMjE2MjM2OSwiaWF0IjoxNzMyMTI2MzY5LCJ1c2VySWQiOjEsInJvbGVzIjoiVVNFUiJ9.IxbAyppBfrdlhRvIPG3rbAhiZXIqFYv5-k9UmXuJ-HwoHLWBp1I5oeOKaUgWC9EFjp7qfqPBk8bxL1tL0GkkdRQmX3mz4J_cn_DPY7Q2FM0bklfyxYj1sfJhelwBJc9EztNcfMEqT8k0_s9_x36acwUqv53-LaObytDW4BZ9cPnHJmjS8wU_uM8aRFyxz7Sz40vQB3BJblwQvWGo8RKZhGx-O4nSxrYNhqEKuZ7Ee1luzaD3j8_LzlW83b1PltEInG3kudsAugiD6gmIya1faUjPuMjOCWmWc720KUfVwR3Nr1TzyhkiEO8Yk1MYX3zfSPurR5ljnIi27CMT8XX44g",
+									"type": "string"
+								}
+							]
+						},
 						"method": "DELETE",
 						"header": [],
 						"url": {
@@ -214,16 +305,258 @@
 				{
 					"name": "Criar Pruu",
 					"request": {
-						"method": "GET",
-						"header": []
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJwb21ibyIsInN1YiI6InBpZXRyb2ZkYW5pZWxAZ21haWwuY29tIiwiZXhwIjoxNzMyNDE5NTI2LCJpYXQiOjE3MzIzODM1MjYsInVzZXJJZCI6MSwicm9sZXMiOiJVU0VSIn0.a8HU0XE5j1ylOEUxY44-0-tCgqVAa9uzT4VmssucGZvJcUumO5UiQ2mqrM5Q9SBTeyYAMb6-QSWylP9xyc8s7hLI3O5n-gdgbdetoDI7gpD2G61DWy_b05H2APRLb0cHB9_8A64B9iwVd2oI5NSGFa1Z-sbVNa4eFzgeipX0dbTIzUCKbPo_DaDpvDGBoiMbcdzX2dQySe5cps3_AbrrHe36IRUOnOQN8bCUmcZxQdzdsbiNlV245mizCzYJTBTi_M0nghrrJfwIOBe8jWNT_NJQmcqVImzjg6k1_B72Agm1CVm8kmcYgMu6O320qrLCb-ZZDOB7vQvzSfXDRNXhuw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"usuario\": {},\r\n    \"texto\": \"Terceiro Pruu\" \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/pombo/api/pruus",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"pombo",
+								"api",
+								"pruus"
+							]
+						}
 					},
 					"response": []
 				},
 				{
 					"name": "Listar com FIltros",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJwb21ibyIsInN1YiI6InBpZXRyb2ZkYW5pZWxAZ21haWwuY29tIiwiZXhwIjoxNzMyNDE5NTI2LCJpYXQiOjE3MzIzODM1MjYsInVzZXJJZCI6MSwicm9sZXMiOiJVU0VSIn0.a8HU0XE5j1ylOEUxY44-0-tCgqVAa9uzT4VmssucGZvJcUumO5UiQ2mqrM5Q9SBTeyYAMb6-QSWylP9xyc8s7hLI3O5n-gdgbdetoDI7gpD2G61DWy_b05H2APRLb0cHB9_8A64B9iwVd2oI5NSGFa1Z-sbVNa4eFzgeipX0dbTIzUCKbPo_DaDpvDGBoiMbcdzX2dQySe5cps3_AbrrHe36IRUOnOQN8bCUmcZxQdzdsbiNlV245mizCzYJTBTi_M0nghrrJfwIOBe8jWNT_NJQmcqVImzjg6k1_B72Agm1CVm8kmcYgMu6O320qrLCb-ZZDOB7vQvzSfXDRNXhuw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"pagina\": 1,\r\n    \"limite\": 10\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/pombo/api/pruus/filtros",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"pombo",
+								"api",
+								"pruus",
+								"filtros"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Salvar Foto Pruu",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJwb21ibyIsInN1YiI6InBpZXRyb2ZkYW5pZWxAZ21haWwuY29tIiwiZXhwIjoxNzMyNDE5NTI2LCJpYXQiOjE3MzIzODM1MjYsInVzZXJJZCI6MSwicm9sZXMiOiJVU0VSIn0.a8HU0XE5j1ylOEUxY44-0-tCgqVAa9uzT4VmssucGZvJcUumO5UiQ2mqrM5Q9SBTeyYAMb6-QSWylP9xyc8s7hLI3O5n-gdgbdetoDI7gpD2G61DWy_b05H2APRLb0cHB9_8A64B9iwVd2oI5NSGFa1Z-sbVNa4eFzgeipX0dbTIzUCKbPo_DaDpvDGBoiMbcdzX2dQySe5cps3_AbrrHe36IRUOnOQN8bCUmcZxQdzdsbiNlV245mizCzYJTBTi_M0nghrrJfwIOBe8jWNT_NJQmcqVImzjg6k1_B72Agm1CVm8kmcYgMu6O320qrLCb-ZZDOB7vQvzSfXDRNXhuw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "foto",
+									"type": "file",
+									"src": "/C:/Users/Pietro/Pictures/Screenshot_20230228-101954_WhatsApp.jpg"
+								},
+								{
+									"key": "pruuId",
+									"value": "b41d17c5-bad0-4a4f-94ae-4fa83f00c59e",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/pombo/api/pruus/salvar-foto-pruu",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"pombo",
+								"api",
+								"pruus",
+								"salvar-foto-pruu"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Dar Like",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJwb21ibyIsInN1YiI6InBpZXRyb2ZkYW5pZWxAZ21haWwuY29tIiwiZXhwIjoxNzMyNDE5NTI2LCJpYXQiOjE3MzIzODM1MjYsInVzZXJJZCI6MSwicm9sZXMiOiJVU0VSIn0.a8HU0XE5j1ylOEUxY44-0-tCgqVAa9uzT4VmssucGZvJcUumO5UiQ2mqrM5Q9SBTeyYAMb6-QSWylP9xyc8s7hLI3O5n-gdgbdetoDI7gpD2G61DWy_b05H2APRLb0cHB9_8A64B9iwVd2oI5NSGFa1Z-sbVNa4eFzgeipX0dbTIzUCKbPo_DaDpvDGBoiMbcdzX2dQySe5cps3_AbrrHe36IRUOnOQN8bCUmcZxQdzdsbiNlV245mizCzYJTBTi_M0nghrrJfwIOBe8jWNT_NJQmcqVImzjg6k1_B72Agm1CVm8kmcYgMu6O320qrLCb-ZZDOB7vQvzSfXDRNXhuw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/pombo/api/pruus/dar-like/b41d17c5-bad0-4a4f-94ae-4fa83f00c59e",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"pombo",
+								"api",
+								"pruus",
+								"dar-like",
+								"b41d17c5-bad0-4a4f-94ae-4fa83f00c59e"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar Likes Pruu",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJwb21ibyIsInN1YiI6InBpZXRyb2ZkYW5pZWxAZ21haWwuY29tIiwiZXhwIjoxNzMyNDE5NTI2LCJpYXQiOjE3MzIzODM1MjYsInVzZXJJZCI6MSwicm9sZXMiOiJVU0VSIn0.a8HU0XE5j1ylOEUxY44-0-tCgqVAa9uzT4VmssucGZvJcUumO5UiQ2mqrM5Q9SBTeyYAMb6-QSWylP9xyc8s7hLI3O5n-gdgbdetoDI7gpD2G61DWy_b05H2APRLb0cHB9_8A64B9iwVd2oI5NSGFa1Z-sbVNa4eFzgeipX0dbTIzUCKbPo_DaDpvDGBoiMbcdzX2dQySe5cps3_AbrrHe36IRUOnOQN8bCUmcZxQdzdsbiNlV245mizCzYJTBTi_M0nghrrJfwIOBe8jWNT_NJQmcqVImzjg6k1_B72Agm1CVm8kmcYgMu6O320qrLCb-ZZDOB7vQvzSfXDRNXhuw",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
-						"header": []
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/pombo/api/pruus/buscar-likes-pruu/b41d17c5-bad0-4a4f-94ae-4fa83f00c59e",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"pombo",
+								"api",
+								"pruus",
+								"buscar-likes-pruu",
+								"b41d17c5-bad0-4a4f-94ae-4fa83f00c59e"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar por Id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJwb21ibyIsInN1YiI6InBpZXRyb2ZkYW5pZWxAZ21haWwuY29tIiwiZXhwIjoxNzMyNDE5NTI2LCJpYXQiOjE3MzIzODM1MjYsInVzZXJJZCI6MSwicm9sZXMiOiJVU0VSIn0.a8HU0XE5j1ylOEUxY44-0-tCgqVAa9uzT4VmssucGZvJcUumO5UiQ2mqrM5Q9SBTeyYAMb6-QSWylP9xyc8s7hLI3O5n-gdgbdetoDI7gpD2G61DWy_b05H2APRLb0cHB9_8A64B9iwVd2oI5NSGFa1Z-sbVNa4eFzgeipX0dbTIzUCKbPo_DaDpvDGBoiMbcdzX2dQySe5cps3_AbrrHe36IRUOnOQN8bCUmcZxQdzdsbiNlV245mizCzYJTBTi_M0nghrrJfwIOBe8jWNT_NJQmcqVImzjg6k1_B72Agm1CVm8kmcYgMu6O320qrLCb-ZZDOB7vQvzSfXDRNXhuw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/pombo/api/pruus/b41d17c5-bad0-4a4f-94ae-4fa83f00c59e",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"pombo",
+								"api",
+								"pruus",
+								"b41d17c5-bad0-4a4f-94ae-4fa83f00c59e"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Deletar Pruu",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJwb21ibyIsInN1YiI6InBpZXRyb2ZkYW5pZWxAZ21haWwuY29tIiwiZXhwIjoxNzMyNDE5NTI2LCJpYXQiOjE3MzIzODM1MjYsInVzZXJJZCI6MSwicm9sZXMiOiJVU0VSIn0.a8HU0XE5j1ylOEUxY44-0-tCgqVAa9uzT4VmssucGZvJcUumO5UiQ2mqrM5Q9SBTeyYAMb6-QSWylP9xyc8s7hLI3O5n-gdgbdetoDI7gpD2G61DWy_b05H2APRLb0cHB9_8A64B9iwVd2oI5NSGFa1Z-sbVNa4eFzgeipX0dbTIzUCKbPo_DaDpvDGBoiMbcdzX2dQySe5cps3_AbrrHe36IRUOnOQN8bCUmcZxQdzdsbiNlV245mizCzYJTBTi_M0nghrrJfwIOBe8jWNT_NJQmcqVImzjg6k1_B72Agm1CVm8kmcYgMu6O320qrLCb-ZZDOB7vQvzSfXDRNXhuw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/pombo/api/pruus/b41d17c5-bad0-4a4f-94ae-4fa83f00c59e",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"pombo",
+								"api",
+								"pruus",
+								"b41d17c5-bad0-4a4f-94ae-4fa83f00c59e"
+							]
+						}
 					},
 					"response": []
 				}
@@ -231,7 +564,268 @@
 		},
 		{
 			"name": "Denúncia",
-			"item": []
+			"item": [
+				{
+					"name": "Criar Denúncia",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJwb21ibyIsInN1YiI6InBpZXRyb2ZkYW5pZWxAZ21haWwuY29tIiwiZXhwIjoxNzMyNDE5NTI2LCJpYXQiOjE3MzIzODM1MjYsInVzZXJJZCI6MSwicm9sZXMiOiJVU0VSIn0.a8HU0XE5j1ylOEUxY44-0-tCgqVAa9uzT4VmssucGZvJcUumO5UiQ2mqrM5Q9SBTeyYAMb6-QSWylP9xyc8s7hLI3O5n-gdgbdetoDI7gpD2G61DWy_b05H2APRLb0cHB9_8A64B9iwVd2oI5NSGFa1Z-sbVNa4eFzgeipX0dbTIzUCKbPo_DaDpvDGBoiMbcdzX2dQySe5cps3_AbrrHe36IRUOnOQN8bCUmcZxQdzdsbiNlV245mizCzYJTBTi_M0nghrrJfwIOBe8jWNT_NJQmcqVImzjg6k1_B72Agm1CVm8kmcYgMu6O320qrLCb-ZZDOB7vQvzSfXDRNXhuw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"pruu\": {\r\n    \"id\": \"25ac8244-92da-432e-9976-e45270b5572a\"\r\n  },\r\n  \"motivo\": \"SPAM\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/pombo/api/denuncias",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"pombo",
+								"api",
+								"denuncias"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar Denúncias Por Pruu",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJwb21ibyIsInN1YiI6ImFkbWluQGdtYWlsLmNvbSIsImV4cCI6MTczMjQyMjA2NSwiaWF0IjoxNzMyMzg2MDY1LCJ1c2VySWQiOjIsInJvbGVzIjoiVVNFUiJ9.RLr0gdboaoxHPZ5YtKoXe3msAURefu4O5FY0aqbR5Icbizz6brNU67BePunIViC5YGqS0vvNHixURQSrCNK7rYIVf06Z-1fO9TtHvqLe5YUqjHbegcaDzHWHfhXkNNcz1lvnjGIw84-uh-EyeSqd2_IoGuZQOABenVUVq5ndtHKo1rVfn0fEHOwhxPCMGMUoe78roBx5sndb-o_wPjgQp-1VOftb90beXHCw0K8o-5M9VAcj2tu1VahAvWuxPdfWYdbuEa1JKjuoJTjbpDoctsEJrlF3XhMBAwIMVs1CD5NjnUk_2pcRTVimF8Dat_6YNGwnlIFQThDwM04-nUfuDg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/pombo/api/denuncias/pruu/25ac8244-92da-432e-9976-e45270b5572a",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"pombo",
+								"api",
+								"denuncias",
+								"pruu",
+								"25ac8244-92da-432e-9976-e45270b5572a"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listar Denúncias com Filtros",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJwb21ibyIsInN1YiI6ImFkbWluQGdtYWlsLmNvbSIsImV4cCI6MTczMjQyMjA2NSwiaWF0IjoxNzMyMzg2MDY1LCJ1c2VySWQiOjIsInJvbGVzIjoiVVNFUiJ9.RLr0gdboaoxHPZ5YtKoXe3msAURefu4O5FY0aqbR5Icbizz6brNU67BePunIViC5YGqS0vvNHixURQSrCNK7rYIVf06Z-1fO9TtHvqLe5YUqjHbegcaDzHWHfhXkNNcz1lvnjGIw84-uh-EyeSqd2_IoGuZQOABenVUVq5ndtHKo1rVfn0fEHOwhxPCMGMUoe78roBx5sndb-o_wPjgQp-1VOftb90beXHCw0K8o-5M9VAcj2tu1VahAvWuxPdfWYdbuEa1JKjuoJTjbpDoctsEJrlF3XhMBAwIMVs1CD5NjnUk_2pcRTVimF8Dat_6YNGwnlIFQThDwM04-nUfuDg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"usuarioId\": 1,\r\n  \"situacaoDenunica\": \"RECUSADA\",\r\n  \"motivoDenuncia\": \"SPAM\",\r\n  \"pagina\": 1,\r\n  \"limite\": 10\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/pombo/api/denuncias/filtros",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"pombo",
+								"api",
+								"denuncias",
+								"filtros"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar por Id da Denúncia",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJwb21ibyIsInN1YiI6ImFkbWluQGdtYWlsLmNvbSIsImV4cCI6MTczMjQyMjA2NSwiaWF0IjoxNzMyMzg2MDY1LCJ1c2VySWQiOjIsInJvbGVzIjoiVVNFUiJ9.RLr0gdboaoxHPZ5YtKoXe3msAURefu4O5FY0aqbR5Icbizz6brNU67BePunIViC5YGqS0vvNHixURQSrCNK7rYIVf06Z-1fO9TtHvqLe5YUqjHbegcaDzHWHfhXkNNcz1lvnjGIw84-uh-EyeSqd2_IoGuZQOABenVUVq5ndtHKo1rVfn0fEHOwhxPCMGMUoe78roBx5sndb-o_wPjgQp-1VOftb90beXHCw0K8o-5M9VAcj2tu1VahAvWuxPdfWYdbuEa1JKjuoJTjbpDoctsEJrlF3XhMBAwIMVs1CD5NjnUk_2pcRTVimF8Dat_6YNGwnlIFQThDwM04-nUfuDg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/pombo/api/denuncias/daf07dec-fd2a-463e-b069-e5663080a246",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"pombo",
+								"api",
+								"denuncias",
+								"daf07dec-fd2a-463e-b069-e5663080a246"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Atualizar Situação Denúncia",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJwb21ibyIsInN1YiI6ImFkbWluQGdtYWlsLmNvbSIsImV4cCI6MTczMjQyMjA2NSwiaWF0IjoxNzMyMzg2MDY1LCJ1c2VySWQiOjIsInJvbGVzIjoiVVNFUiJ9.RLr0gdboaoxHPZ5YtKoXe3msAURefu4O5FY0aqbR5Icbizz6brNU67BePunIViC5YGqS0vvNHixURQSrCNK7rYIVf06Z-1fO9TtHvqLe5YUqjHbegcaDzHWHfhXkNNcz1lvnjGIw84-uh-EyeSqd2_IoGuZQOABenVUVq5ndtHKo1rVfn0fEHOwhxPCMGMUoe78roBx5sndb-o_wPjgQp-1VOftb90beXHCw0K8o-5M9VAcj2tu1VahAvWuxPdfWYdbuEa1JKjuoJTjbpDoctsEJrlF3XhMBAwIMVs1CD5NjnUk_2pcRTVimF8Dat_6YNGwnlIFQThDwM04-nUfuDg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/pombo/api/denuncias/admin/atualizar-situacao/daf07dec-fd2a-463e-b069-e5663080a246/recusada",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"pombo",
+								"api",
+								"denuncias",
+								"admin",
+								"atualizar-situacao",
+								"daf07dec-fd2a-463e-b069-e5663080a246",
+								"recusada"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Deletar Denúncia",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJwb21ibyIsInN1YiI6InBpZXRyb2ZkYW5pZWxAZ21haWwuY29tIiwiZXhwIjoxNzMyNDI1ODk3LCJpYXQiOjE3MzIzODk4OTcsInVzZXJJZCI6MSwicm9sZXMiOiJVU0VSIn0.afck8cANkFBMBFlvBPYO4HFP5jnUdOE-XGRt-W0JRyjbnuTiLiMd6V6pY1Lig4yfxGltTLOS2J7Y_bwX6hHFJ8lvWailYjspzmZCjltzEtZiGzkjSXuxFlC6yFnOBQ4OB8swzBIslDu75I7G5fJVQp-D3Uu1JL0jMi3dqlYp-aaatlU_PuFAELiUxqxuj9wbpocPaxLFrkE4Gcbnei_Zyg0wsaSosgq1iYDJar5yMmlU4mGCcu0yOPZEjf_gzw6xAiOoJ_hB5qgaETv01kgdNvZY9X_S6QPWGxhyCAd1O5Bua5Rs0CngfcRNMAe57vLAOtisIBDK5JfeTQOaOU-ZWg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/pombo/api/denuncias/daf07dec-fd2a-463e-b069-e5663080a246",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"pombo",
+								"api",
+								"denuncias",
+								"daf07dec-fd2a-463e-b069-e5663080a246"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Imagem",
+			"item": [
+				{
+					"name": "Upload de Imagem",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJwb21ibyIsInN1YiI6InBpZXRyb2ZkYW5pZWxAZ21haWwuY29tIiwiZXhwIjoxNzMyNDI1ODk3LCJpYXQiOjE3MzIzODk4OTcsInVzZXJJZCI6MSwicm9sZXMiOiJVU0VSIn0.afck8cANkFBMBFlvBPYO4HFP5jnUdOE-XGRt-W0JRyjbnuTiLiMd6V6pY1Lig4yfxGltTLOS2J7Y_bwX6hHFJ8lvWailYjspzmZCjltzEtZiGzkjSXuxFlC6yFnOBQ4OB8swzBIslDu75I7G5fJVQp-D3Uu1JL0jMi3dqlYp-aaatlU_PuFAELiUxqxuj9wbpocPaxLFrkE4Gcbnei_Zyg0wsaSosgq1iYDJar5yMmlU4mGCcu0yOPZEjf_gzw6xAiOoJ_hB5qgaETv01kgdNvZY9X_S6QPWGxhyCAd1O5Bua5Rs0CngfcRNMAe57vLAOtisIBDK5JfeTQOaOU-ZWg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/Pietro/Pictures/palcoaberto_09jun24_@imperioteca_7.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/pombo/api/imagem/upload",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"pombo",
+								"api",
+								"imagem",
+								"upload"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	]
 }
