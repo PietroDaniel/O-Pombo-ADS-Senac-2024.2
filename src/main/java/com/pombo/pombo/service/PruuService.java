@@ -52,9 +52,9 @@ public class PruuService {
             throw new PomboException("O texto deve ter entre 1 e 350 caracteres");
         }
 
-        String textoCriptografado = rsaEncoder.encode(novoPruu.getTexto());
+       // String textoCriptografado = rsaEncoder.encode(novoPruu.getTexto());
 
-        novoPruu.setTexto(textoCriptografado);
+       // novoPruu.setTexto(textoCriptografado);
 
         return pruuRepository.save(novoPruu);
     }
