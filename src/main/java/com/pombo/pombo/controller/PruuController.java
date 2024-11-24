@@ -92,9 +92,9 @@ public class PruuController {
     @PostMapping("/filtros")
     public List<PruuDTO> listarComFiltros(@RequestBody PruuSeletor seletor) throws PomboException {
 
- //       Usuario subject = authService.getAuthenticatedUser();
+        Usuario usuarioAutenticado = authService.getAuthenticatedUser();
 
-        return pruuService.listarComFiltros(seletor);
+        return pruuService.listarComFiltros(seletor, usuarioAutenticado);
     }
 
     @DeleteMapping("/{pruuId}")

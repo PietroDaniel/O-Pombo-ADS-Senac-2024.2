@@ -17,6 +17,7 @@ public class PruuDTO {
     private Integer quantidadeLikes;
     private Integer quantidadeDenuncias;
     private LocalDateTime criadoEm;
-    private boolean excluido;
-    private boolean bloqueado;
+    private Boolean excluido;
+    private Boolean bloqueado;
+  	private Boolean estaCurtido;
 }

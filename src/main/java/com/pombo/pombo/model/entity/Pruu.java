@@ -48,7 +48,9 @@ public class Pruu {
     @Column(name = "data_hora_criacao", nullable = false, updatable = false)
     private LocalDateTime dataHoraCriacao = LocalDateTime.now();
 
-    public static PruuDTO paraDTO(Pruu pruu, Integer quantidadeLikes, Integer quantidadeDenuncias) {
+    public static PruuDTO paraDTO(Pruu pruu, Integer quantidadeLikes, Integer quantidadeDenuncias, Usuario usuarioAutenticado) {
+    	boolean estaCurtido = pruu.getLikedByUsers().contains(usuarioAutenticado);
+    	
         return new PruuDTO(
                 pruu.getId(),
                 pruu.getTexto(),
@@ -60,7 +62,27 @@ public class Pruu {
                 quantidadeDenuncias,
                 pruu.getDataHoraCriacao(),
                 pruu.isExcluido(),
-                pruu.isBloqueado()
+                pruu.isBloqueado(),
+                estaCurtido 
         );
     }
+    
+    public static PruuDTO paraDTO(Pruu pruu, Integer quantidadeLikes, Integer quantidadeDenuncias) {
+    	
+        return new PruuDTO(
+                pruu.getId(),
+                pruu.getTexto(),
+                pruu.getFoto(),
+                pruu.getUsuario().getId(),
+                pruu.getUsuario().getNome(),
+                pruu.getUsuario().getFoto(),
+                quantidadeLikes,
+                quantidadeDenuncias,
+                pruu.getDataHoraCriacao(),
+                pruu.isExcluido(),
+                pruu.isBloqueado(),
+                false
+        );
+    }
+
 }

@@ -102,9 +102,9 @@ public class PruuService {
 
         return Pruu.paraDTO(pruu, quantidadeLikes, quantidadeDenuncias);
     }
-
-
-    public List<PruuDTO> listarComFiltros(PruuSeletor seletor) {
+    
+   
+    public List<PruuDTO> listarComFiltros(PruuSeletor seletor, Usuario usuarioAutenticado) {
 
         List<Pruu> pruus = new ArrayList<>();
 
@@ -124,7 +124,7 @@ public class PruuService {
 //        }
 
         pruus = pruuRepository.findAll(seletor);
-        return converterParaDTO(pruus);
+        return converterParaDTO(pruus, usuarioAutenticado);
     }
 
     public void excluirPruu(String pruuid, Long usuarioID) throws PomboException {
@@ -146,6 +146,22 @@ public class PruuService {
                 .collect(Collectors.toList());
     }
 
+    public List<PruuDTO> converterParaDTO(List<Pruu> pruus, Usuario usuarioAutenticado) {
+
+        List<PruuDTO> dtos = new ArrayList<>();
+
+        for (Pruu p : pruus) {
+           // p.setTexto(rsaEncoder.decode(p.getTexto()));
+
+            Integer quantidadeLikes = p.getLikedByUsers().size();
+            Integer quantidadeDenuncias = p.getDenuncias().size();
+
+            PruuDTO dto = Pruu.paraDTO(p, quantidadeLikes, quantidadeDenuncias, usuarioAutenticado);
+            dtos.add(dto);
+        }
+        return dtos;
+    }
+    
     public List<PruuDTO> converterParaDTO(List<Pruu> pruus) {
 
         List<PruuDTO> dtos = new ArrayList<>();
