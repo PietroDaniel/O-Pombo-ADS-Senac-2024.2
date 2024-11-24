@@ -8,6 +8,9 @@ import com.pombo.pombo.model.entity.Usuario;
 import com.pombo.pombo.model.enums.Role;
 import com.pombo.pombo.service.ImagemService;
 import com.pombo.pombo.service.UsuarioService;
+
+import jakarta.servlet.annotation.MultipartConfig;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/pruus")
+@MultipartConfig(fileSizeThreshold = 10485760) // 10MB
 
 public class PruuController {
 
@@ -88,9 +92,9 @@ public class PruuController {
     @PostMapping("/filtros")
     public List<PruuDTO> listarComFiltros(@RequestBody PruuSeletor seletor) throws PomboException {
 
-        Usuario subject = authService.getAuthenticatedUser();
+ //       Usuario subject = authService.getAuthenticatedUser();
 
-        return pruuService.listarComFiltros(seletor, subject.getId());
+        return pruuService.listarComFiltros(seletor);
     }
 
     @DeleteMapping("/{pruuId}")

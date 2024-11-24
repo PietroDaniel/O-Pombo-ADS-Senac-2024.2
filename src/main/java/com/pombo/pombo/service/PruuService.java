@@ -104,7 +104,7 @@ public class PruuService {
     }
 
 
-    public List<PruuDTO> listarComFiltros(PruuSeletor seletor, Long subjectId) {
+    public List<PruuDTO> listarComFiltros(PruuSeletor seletor) {
 
         List<Pruu> pruus = new ArrayList<>();
 
@@ -116,13 +116,14 @@ public class PruuService {
             pruus = pruuRepository.findAll(seletor, page).toList();
         }
 
-        if (seletor.isEstaCurtido()) {
-            pruus = pruus.stream()
-                    .filter(pruu -> pruu.getLikedByUsers().stream()
-                            .anyMatch(usuario -> usuario.getId().equals(subjectId)))
-                    .collect(Collectors.toList());
-        }
+//        if (seletor.isEstaCurtido()) {
+//            pruus = pruus.stream()
+//                    .filter(pruu -> pruu.getLikedByUsers().stream()
+//                            .anyMatch(usuario -> usuario.getId().equals(subjectId)))
+//                    .collect(Collectors.toList());
+//        }
 
+        pruus = pruuRepository.findAll(seletor);
         return converterParaDTO(pruus);
     }
 

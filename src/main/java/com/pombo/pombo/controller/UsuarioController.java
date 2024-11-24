@@ -11,11 +11,15 @@ import org.springframework.web.bind.annotation.*;
 import com.pombo.pombo.model.entity.Usuario;
 import com.pombo.pombo.model.seletor.UsuarioSeletor;
 import com.pombo.pombo.service.UsuarioService;
+
+import jakarta.servlet.annotation.MultipartConfig;
+
 import com.pombo.pombo.exception.PomboException;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/usuarios")
+@MultipartConfig(fileSizeThreshold = 10485760) // 10MB
 public class UsuarioController {
 
     @Autowired
