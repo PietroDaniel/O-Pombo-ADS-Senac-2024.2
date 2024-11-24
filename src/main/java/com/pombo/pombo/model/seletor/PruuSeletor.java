@@ -21,9 +21,7 @@ import org.springframework.data.jpa.domain.Specification;
 public class PruuSeletor extends BaseSeletor implements Specification<Pruu> {
 
     private String texto;
-    @JsonFormat(pattern = "yyyy-MM-dd['T'HH:mm:ss]")
     private LocalDate dataInicioCriacao;
-    @JsonFormat(pattern = "yyyy-MM-dd['T'HH:mm:ss]")
     private LocalDate dataFimCriacao;
     private Integer usuarioId;
     private String usuarioNome;
