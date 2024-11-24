@@ -11,6 +11,7 @@ import jakarta.persistence.criteria.Root;
 import lombok.Data;
 import org.springframework.data.jpa.domain.Specification;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,8 +23,8 @@ public class DenunciaSeletor extends BaseSeletor implements Specification<Denunc
     private String pruuId;
     private MotivoDenuncia motivoDenuncia;
     private SituacaoDenuncia situacaoDenunica;
-    private LocalDateTime dataInicio;
-    private LocalDateTime dataFinal;
+    private LocalDate dataInicio;
+    private LocalDate dataFinal;
 
 
     @Override

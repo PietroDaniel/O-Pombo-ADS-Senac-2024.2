@@ -3,6 +3,7 @@ package com.pombo.pombo.model.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -16,7 +17,7 @@ public class PruuDTO {
     private String usuarioFotoPerfil;
     private Integer quantidadeLikes;
     private Integer quantidadeDenuncias;
-    private LocalDateTime criadoEm;
+    private LocalDate criadoEm;
     private boolean excluido;
     private boolean bloqueado;
 }

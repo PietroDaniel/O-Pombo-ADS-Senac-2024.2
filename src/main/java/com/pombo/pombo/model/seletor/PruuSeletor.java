@@ -1,9 +1,11 @@
 package com.pombo.pombo.model.seletor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.pombo.pombo.model.entity.Pruu;
 import com.pombo.pombo.model.entity.Usuario;
@@ -19,8 +21,10 @@ import org.springframework.data.jpa.domain.Specification;
 public class PruuSeletor extends BaseSeletor implements Specification<Pruu> {
 
     private String texto;
-    private LocalDateTime dataInicioCriacao;
-    private LocalDateTime dataFimCriacao;
+    @JsonFormat(pattern = "yyyy-MM-dd['T'HH:mm:ss]")
+    private LocalDate dataInicioCriacao;
+    @JsonFormat(pattern = "yyyy-MM-dd['T'HH:mm:ss]")
+    private LocalDate dataFimCriacao;
     private Integer usuarioId;
     private String usuarioNome;
     private String excluido;
@@ -69,7 +73,7 @@ public class PruuSeletor extends BaseSeletor implements Specification<Pruu> {
         }
 
         aplicarFiltroPeriodo(root, cb, predicates, this.getDataInicioCriacao(),
-                this.getDataFimCriacao(), "criadoEm");
+                this.getDataFimCriacao(), "dataHoraCriacao");
 
         return cb.and(predicates.toArray(new Predicate[0]));
     }

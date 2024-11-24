@@ -30,14 +30,23 @@ public abstract class BaseSeletor {
 
     public static void aplicarFiltroPeriodo(Root root,
                                             CriteriaBuilder cb, List<Predicate> predicates,
-                                            LocalDateTime startDate, LocalDateTime endDate, String attributeName) {
+                                            LocalDate startDate, LocalDate endDate, String attributeName) {
         if (startDate != null && endDate != null) {
-            predicates.add(cb.between(root.get(attributeName), startDate, endDate));
+        	
+        	LocalDateTime inicioDoDia = startDate.atStartOfDay();
+            LocalDateTime finalDoDia = endDate.atTime(23, 59, 59, 999999999);
+            predicates.add(cb.between(root.get(attributeName), inicioDoDia, finalDoDia));
         } else if (startDate != null) {
-            predicates.add(cb.greaterThanOrEqualTo(root.get(attributeName), startDate));
+            // Apenas dataInicial fornecida
+            LocalDateTime inicioDoDia = startDate.atStartOfDay();
+            predicates.add(cb.greaterThanOrEqualTo(root.get(attributeName), inicioDoDia));
         } else if (endDate != null) {
-            predicates.add(cb.lessThanOrEqualTo(root.get(attributeName), endDate));
+            // Apenas dataFinal fornecida
+            LocalDateTime finalDoDia = endDate.atTime(23, 59, 59, 999999999);
+            predicates.add(cb.lessThanOrEqualTo(root.get(attributeName), finalDoDia));
         }
+        
+        
     }
 
     public int getPagina() {
