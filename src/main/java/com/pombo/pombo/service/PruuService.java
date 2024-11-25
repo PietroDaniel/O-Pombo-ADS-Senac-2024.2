@@ -13,6 +13,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -103,29 +108,51 @@ public class PruuService {
         return Pruu.paraDTO(pruu, quantidadeLikes, quantidadeDenuncias);
     }
     
+    
+  
    
-    public List<PruuDTO> listarComFiltros(PruuSeletor seletor, Usuario usuarioAutenticado) {
+    public Page<PruuDTO> listarComFiltros(PruuSeletor seletor, Usuario usuarioAutenticado) {
+        // Configuração da paginação e ordenação
+        Pageable pageable = PageRequest.of(
+            seletor.getPagina() - 1, 
+            seletor.getLimite(), 
+            Sort.by("dataHoraCriacao").descending() // Ordenação por data
+        );
 
-        List<Pruu> pruus = new ArrayList<>();
+        // Busca paginada utilizando Specification
+        Page<Pruu> paginaPruus = pruuRepository.findAll(seletor, pageable);
 
-        if (seletor.temPaginacao()) {
-            int pageNumber = seletor.getPagina();
-            int pageSize = seletor.getLimite();
-
-            PageRequest page = PageRequest.of(pageNumber - 1, pageSize);
-            pruus = pruuRepository.findAll(seletor, page).toList();
-        }
-
-//        if (seletor.isEstaCurtido()) {
-//            pruus = pruus.stream()
-//                    .filter(pruu -> pruu.getLikedByUsers().stream()
-//                            .anyMatch(usuario -> usuario.getId().equals(subjectId)))
-//                    .collect(Collectors.toList());
-//        }
-
-        pruus = pruuRepository.findAllOrderedByDataHora(seletor);
-        return converterParaDTO(pruus, usuarioAutenticado);
+        // Mapeia para DTO
+        return paginaPruus.map(pruu -> Pruu.paraDTO(
+            pruu,
+            pruu.getLikedByUsers().size(),
+            pruu.getDenuncias().size(),
+            usuarioAutenticado
+        ));
     }
+    
+//    public List<PruuDTO> listarComFiltros(PruuSeletor seletor, Usuario usuarioAutenticado) {
+//
+//        List<Pruu> pruus = new ArrayList<>();
+//
+//        if (seletor.temPaginacao()) {
+//            int pageNumber = seletor.getPagina();
+//            int pageSize = seletor.getLimite();
+//
+//            PageRequest page = PageRequest.of(pageNumber - 1, pageSize);
+//            pruus = pruuRepository.findAll(seletor, page).toList();
+//        }
+//
+////        if (seletor.isEstaCurtido()) {
+////            pruus = pruus.stream()
+////                    .filter(pruu -> pruu.getLikedByUsers().stream()
+////                            .anyMatch(usuario -> usuario.getId().equals(subjectId)))
+////                    .collect(Collectors.toList());
+////        }
+//
+//        pruus = pruuRepository.findAllOrderedByDataHora(seletor);
+//        return converterParaDTO(pruus, usuarioAutenticado);
+//    }
 
     public void excluirPruu(String pruuid, Long usuarioID) throws PomboException {
 

@@ -1,26 +1,21 @@
 package com.pombo.pombo.model.repository;
 
-import java.util.List;
 
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import com.pombo.pombo.model.entity.Pruu;
-import com.pombo.pombo.model.seletor.PruuSeletor;
 
 @Repository
-public interface PruuRepository extends JpaRepository<Pruu, String>, JpaSpecificationExecutor<Pruu> {
+public interface PruuRepository extends PagingAndSortingRepository<Pruu, String>, JpaRepository<Pruu, String>, JpaSpecificationExecutor<Pruu> {
 
-	@Query("SELECT p FROM Pruu p WHERE p.usuario.id = :idUsuario ORDER BY p.dataHoraCriacao DESC")
-	public List<Pruu> findbyIdUsuario(Long idUsuario);
-	
-	@Query("SELECT p FROM Pruu p ORDER BY p.dataHoraCriacao DESC")
-	public List<Pruu> findAllOrderedByDataHora();
-	
-	@Query("SELECT p FROM Pruu p ORDER BY p.dataHoraCriacao DESC")
-	public List<Pruu> findAllOrderedByDataHora(PruuSeletor seletor);
+	 Page<Pruu> findAll(Specification<Pruu> spec, Pageable pageable);
 
 
 }

@@ -15,6 +15,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+
+
 import com.pombo.pombo.exception.PomboException;
 import com.pombo.pombo.model.dto.PruuDTO;
 import com.pombo.pombo.model.entity.Pruu;
@@ -89,13 +95,30 @@ public class PruuController {
         return ResponseEntity.ok(pruu);
     }
 
+//    @PostMapping("/filtros")
+//    public List<PruuDTO> listarComFiltros(@RequestBody PruuSeletor seletor) throws PomboException {
+//
+//        Usuario usuarioAutenticado = authService.getAuthenticatedUser();
+//
+//        return (List<PruuDTO>) pruuService.listarComFiltros(seletor, usuarioAutenticado);
+//    }
+    
+
     @PostMapping("/filtros")
-    public List<PruuDTO> listarComFiltros(@RequestBody PruuSeletor seletor) throws PomboException {
+    public ResponseEntity<Page<PruuDTO>> listarComFiltros(
+            @RequestBody PruuSeletor seletor,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) throws PomboException {
 
         Usuario usuarioAutenticado = authService.getAuthenticatedUser();
+        seletor.setPagina(page + 1); // Ajuste para índices baseados em 1
+        seletor.setLimite(size);
 
-        return pruuService.listarComFiltros(seletor, usuarioAutenticado);
+        Page<PruuDTO> pruus = pruuService.listarComFiltros(seletor, usuarioAutenticado);
+        return ResponseEntity.ok(pruus);
     }
+    
+    
 
     @DeleteMapping("/{pruuId}")
     public ResponseEntity<Void> deletarPruu(@PathVariable String pruuId) throws PomboException {
