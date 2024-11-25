@@ -123,7 +123,7 @@ public class PruuService {
 //                    .collect(Collectors.toList());
 //        }
 
-        pruus = pruuRepository.findAll(seletor);
+        pruus = pruuRepository.findAllOrderedByDataHora(seletor);
         return converterParaDTO(pruus, usuarioAutenticado);
     }
 
