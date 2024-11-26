@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
@@ -71,6 +70,14 @@ public class PruuService {
 
         return pruuRepository.save(novoPruu);
     }
+    
+    public void atualizarPruu(String id, String novoConteudo) throws PomboException {
+        Pruu pruu = pruuRepository.findById(id)
+            .orElseThrow(() -> new PomboException("Pruu não encontrado"));
+        pruu.setTexto(novoConteudo);
+        pruuRepository.save(pruu);
+    }
+
 
     public void darLike(Long usuarioID, String pruuID) throws PomboException {
 

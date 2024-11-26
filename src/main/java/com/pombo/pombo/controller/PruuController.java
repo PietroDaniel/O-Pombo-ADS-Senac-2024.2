@@ -94,6 +94,13 @@ public class PruuController {
         PruuDTO pruu = pruuService.buscarPorId(pruuId);
         return ResponseEntity.ok(pruu);
     }
+    
+    @PutMapping("/atualizar/{pruuId}")
+    public ResponseEntity<Void> atualizarPruu(@PathVariable String pruuId, @RequestBody PruuDTO pruuDTO) throws PomboException {
+        pruuService.atualizarPruu(pruuId, pruuDTO.getPruuConteudo());
+        return ResponseEntity.noContent().build();
+    }
+
 
 //    @PostMapping("/filtros")
 //    public List<PruuDTO> listarComFiltros(@RequestBody PruuSeletor seletor) throws PomboException {
