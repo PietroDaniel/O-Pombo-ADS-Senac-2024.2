@@ -51,6 +51,13 @@ public class UsuarioController {
         Usuario usuario = usuarioService.buscarPorId(id);
         return ResponseEntity.ok(usuario);
     }
+    
+    @GetMapping("/usuario-autenticado")
+    public ResponseEntity<Usuario> buscarUsuarioAutenticado() throws PomboException {
+        Usuario usuarioAutenticado = authenticationService.getAuthenticatedUser();
+        return ResponseEntity.ok(usuarioAutenticado);
+    }
+
 
     @PostMapping("/novo")
     public ResponseEntity<Usuario> criarUsuario(@RequestBody Usuario novoUsuario) throws PomboException {
@@ -58,20 +65,24 @@ public class UsuarioController {
         return ResponseEntity.status(201).body(usuarioCriado);
     }
 
-
     @PutMapping
     public ResponseEntity<Usuario> atualizarUsuario(@RequestBody Usuario usuarioAtualizado)
             throws PomboException {
+        // Obtém o usuário autenticado
+        Usuario usuarioAutenticado = authenticationService.getAuthenticatedUser();
 
-        Usuario subject = authenticationService.getAuthenticatedUser();
+        // Garante que o ID do usuário atualizado seja o mesmo do usuário autenticado
+        if (!usuarioAutenticado.getId().equals(usuarioAtualizado.getId())) {
+            throw new PomboException("Você não tem permissão para alterar este usuário");
+        }
 
-        usuarioAtualizado.setId(subject.getId());
-
+        // Atualiza o usuário
         Usuario usuario = usuarioService.atualizarUsuario(usuarioAtualizado);
+
         return ResponseEntity.ok(usuario);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deletarUsuario(@PathVariable Long id) throws PomboException {
         usuarioService.excluirUsuario(id);
         return ResponseEntity.noContent().build();

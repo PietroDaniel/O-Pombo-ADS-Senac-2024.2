@@ -7,7 +7,6 @@ import com.pombo.pombo.model.entity.Usuario;
 import com.pombo.pombo.model.repository.PruuRepository;
 import com.pombo.pombo.model.repository.UsuarioRepository;
 import com.pombo.pombo.model.seletor.PruuSeletor;
-import com.pombo.pombo.utils.RSAEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -26,9 +25,6 @@ public class PruuService {
 
     @Autowired
     private PruuRepository pruuRepository;
-
-    @Autowired
-    private RSAEncoder rsaEncoder;
 
     @Autowired
     private UsuarioRepository usuarioRepository;
@@ -64,10 +60,6 @@ public class PruuService {
             throw new PomboException("O texto deve ter entre 1 e 300 caracteres.");
         }
         
-       // String textoCriptografado = rsaEncoder.encode(novoPruu.getTexto());
-
-       // novoPruu.setTexto(textoCriptografado);
-
         return pruuRepository.save(novoPruu);
     }
     
@@ -107,7 +99,6 @@ public class PruuService {
 
     public PruuDTO buscarPorId(String uuid) throws PomboException {
         Pruu pruu = pruuRepository.findById(uuid).orElseThrow(() -> new PomboException("Pruu não encontrado"));
-        //pruu.setTexto(rsaEncoder.decode(pruu.getTexto()));
 
         Integer quantidadeLikes = pruu.getLikedByUsers().size();
         Integer quantidadeDenuncias = pruu.getDenuncias().size();
@@ -189,7 +180,6 @@ public class PruuService {
         List<PruuDTO> dtos = new ArrayList<>();
 
         for (Pruu p : pruus) {
-           // p.setTexto(rsaEncoder.decode(p.getTexto()));
 
             Integer quantidadeLikes = p.getLikedByUsers().size();
             Integer quantidadeDenuncias = p.getDenuncias().size();
@@ -205,7 +195,6 @@ public class PruuService {
         List<PruuDTO> dtos = new ArrayList<>();
 
         for (Pruu p : pruus) {
-           // p.setTexto(rsaEncoder.decode(p.getTexto()));
 
             Integer quantidadeLikes = p.getLikedByUsers().size();
             Integer quantidadeDenuncias = p.getDenuncias().size();

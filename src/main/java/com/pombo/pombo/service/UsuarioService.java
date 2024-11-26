@@ -1,6 +1,5 @@
 package com.pombo.pombo.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -10,15 +9,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.pombo.pombo.exception.PomboException;
-import com.pombo.pombo.model.entity.Pruu;
 import com.pombo.pombo.model.entity.Usuario;
-import com.pombo.pombo.model.repository.PruuRepository;
 import com.pombo.pombo.model.repository.UsuarioRepository;
 import com.pombo.pombo.model.seletor.UsuarioSeletor;
 
-import jakarta.persistence.criteria.Predicate;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
@@ -29,6 +26,11 @@ public class UsuarioService implements UserDetailsService {
 
     @Autowired
     private ImagemService imagemService;
+    
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
 
     public void salvarFotoPerfil(MultipartFile foto, Long usuarioId) throws PomboException {
 
@@ -42,11 +44,29 @@ public class UsuarioService implements UserDetailsService {
         verificarSeUsuarioExiste(novoUsuario);
         return usuarioRepository.save(novoUsuario);
     }
+    
 
     public Usuario atualizarUsuario(Usuario usuarioAtualizado) throws PomboException {
-        verificarSeUsuarioExiste(usuarioAtualizado);
-        return usuarioRepository.save(usuarioAtualizado);
+        // Verifica se o usuário existe
+        Usuario usuarioExistente = usuarioRepository.findById(usuarioAtualizado.getId())
+                .orElseThrow(() -> new PomboException("Usuário não encontrado"));
+
+        // Atualiza apenas os campos permitidos
+        usuarioExistente.setNome(usuarioAtualizado.getNome());
+        usuarioExistente.setEmail(usuarioAtualizado.getEmail());
+
+        // Encripta a senha somente se foi alterada
+        if (usuarioAtualizado.getPassword() != null && !usuarioAtualizado.getPassword().isEmpty()) {
+            usuarioExistente.setPassword(passwordEncoder.encode(usuarioAtualizado.getPassword()));
+        }
+
+        return usuarioRepository.save(usuarioExistente);
     }
+
+//    public Usuario atualizarUsuario(Usuario usuarioAtualizado) throws PomboException {
+//        //verificarSeUsuarioExiste(usuarioAtualizado);
+//        return usuarioRepository.save(usuarioAtualizado);
+//    }
 
     public List<Usuario> listarTodos() {
         return usuarioRepository.findAll();

@@ -1,20 +1,15 @@
 package com.pombo.pombo.model.seletor;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.pombo.pombo.model.entity.Pruu;
-import com.pombo.pombo.model.entity.Usuario;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import org.springframework.data.jpa.domain.Specification;
 
 @Data
