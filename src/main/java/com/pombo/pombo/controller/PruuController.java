@@ -107,13 +107,9 @@ public class PruuController {
 
     @PostMapping("/filtros")
     public ResponseEntity<Page<PruuDTO>> listarComFiltros(
-            @RequestBody PruuSeletor seletor,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) throws PomboException {
+            @RequestBody PruuSeletor seletor) throws PomboException {
 
         Usuario usuarioAutenticado = authService.getAuthenticatedUser();
-        seletor.setPagina(page + 1); // Ajuste para índices baseados em 1
-        seletor.setLimite(size);
 
         Page<PruuDTO> pruus = pruuService.listarComFiltros(seletor, usuarioAutenticado);
         return ResponseEntity.ok(pruus);

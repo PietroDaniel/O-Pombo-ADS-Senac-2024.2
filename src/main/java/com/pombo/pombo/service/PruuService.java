@@ -125,7 +125,11 @@ public class PruuService {
             seletor.getLimite(), 
             Sort.by("dataHoraCriacao").descending() // Ordenação por data
         );
-
+        
+        if (seletor.isCurtidosPeloUsuario()) {
+            seletor.setCurtidoPorUsuarioId(usuarioAutenticado.getId());
+        }
+        
         // Busca paginada utilizando Specification
         Page<Pruu> paginaPruus = pruuRepository.findAll(seletor, pageable);
 

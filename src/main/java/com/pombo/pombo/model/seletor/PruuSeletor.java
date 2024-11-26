@@ -27,6 +27,9 @@ public class PruuSeletor extends BaseSeletor implements Specification<Pruu> {
     private String usuarioNome;
     private String excluido;
     private String bloqueado;
+    private boolean curtidosPeloUsuario; 
+    private Long curtidoPorUsuarioId; 
+
 
     @JsonProperty("estaCurtido")
     private boolean estaCurtido;
@@ -35,6 +38,15 @@ public class PruuSeletor extends BaseSeletor implements Specification<Pruu> {
     public Predicate toPredicate(Root<Pruu> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
         java.util.List<Predicate> predicates = new ArrayList<>();
 
+        if (this.isCurtidosPeloUsuario() && this.getCurtidoPorUsuarioId() != null) {
+            // Filtro que verifica se o Pruu foi curtido pelo usuário logado
+            predicates.add(cb.isMember(
+                this.getCurtidoPorUsuarioId(),
+                root.get("likedByUsers").get("id")
+            ));
+        }
+        
+                
         if (this.getTexto() != null && !this.getTexto().trim().isEmpty()) {
             // WHERE/AND  COLUMN  OPERATOR         VALUE
             //   where    texto     like    '%substring do texto%'
