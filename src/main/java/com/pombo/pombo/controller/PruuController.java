@@ -6,8 +6,6 @@ import java.util.List;
 import com.pombo.pombo.auth.AuthenticationService;
 import com.pombo.pombo.model.entity.Usuario;
 import com.pombo.pombo.model.enums.Role;
-import com.pombo.pombo.service.ImagemService;
-import com.pombo.pombo.service.UsuarioService;
 
 import jakarta.servlet.annotation.MultipartConfig;
 
@@ -16,10 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-
 
 import com.pombo.pombo.exception.PomboException;
 import com.pombo.pombo.model.dto.PruuDTO;

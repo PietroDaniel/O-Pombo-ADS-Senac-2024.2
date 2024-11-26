@@ -8,7 +8,6 @@ import com.pombo.pombo.model.entity.Pruu;
 import com.pombo.pombo.model.enums.SituacaoDenuncia;
 import com.pombo.pombo.model.repository.PruuRepository;
 import com.pombo.pombo.model.seletor.DenunciaSeletor;
-import com.pombo.pombo.utils.RSAEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;

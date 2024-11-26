@@ -4,19 +4,16 @@ import com.pombo.pombo.auth.AuthenticationService;
 import com.pombo.pombo.exception.PomboException;
 import com.pombo.pombo.model.dto.DenunciaDTO;
 import com.pombo.pombo.model.entity.Denuncia;
-import com.pombo.pombo.model.entity.Pruu;
 import com.pombo.pombo.model.entity.Usuario;
 import com.pombo.pombo.model.enums.Role;
 import com.pombo.pombo.model.enums.SituacaoDenuncia;
 import com.pombo.pombo.model.seletor.DenunciaSeletor;
 import com.pombo.pombo.service.DenunciaService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/denuncias")
@@ -76,7 +73,7 @@ public class DenunciaController {
             Denuncia denunciaCriada = denunciaService.criarDenuncia(novaDenuncia);
             return ResponseEntity.status(201).body(denunciaCriada);
         } else {
-            throw new PomboException("Administradores não podem criar Pruus!");
+            throw new PomboException("Administradores não podem criar Denúncias!");
         }
 
     }
